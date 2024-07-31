@@ -1,0 +1,14 @@
+:root {
+    --accent-colour-2: #495972;  
+}
+
+.computer-title {
+    border-radius: 5px;
+    background-color: var(--accent-colour-2);
+    color: white;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    padding: 10px;
+    width: 100%;
+}

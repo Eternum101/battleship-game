@@ -1,0 +1,14 @@
+:root {
+    --accent-colour: #d6263e;
+}
+
+.player-title {
+    border-radius: 5px;
+    background-color: var(--accent-colour);
+    color: white;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    padding: 10px;
+    width: 100%;
+}

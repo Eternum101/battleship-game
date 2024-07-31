@@ -30,6 +30,13 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
             <div class="column-header">10</div>
           <GameBoard board={board} handleCellClick={handlePlayerCellClick} />
       </div>
+      <div className="fleet-container">
+        <h1>Place Fleet</h1>
+        <div className="btn-fleet-container">
+          <button className="btn-randomize">Randomize</button>
+          <button className="btn-flip">Flip</button>
+        </div>
+      </div>
     </div>
     );
 }

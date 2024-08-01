@@ -12,3 +12,45 @@
     padding: 10px;
     width: 100%;
 }
+
+.enemy-fleet-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 30px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.enemy-fleet-container h1 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: var(--accent-colour);
+    width: 70%;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.destroyed-enemy-ships {
+    display: flex;
+    justify-content: center;
+    opacity: 0.7;
+    font-size: 0.7rem;
+    gap: 50px;
+}
+
+.ships-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.ships-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}

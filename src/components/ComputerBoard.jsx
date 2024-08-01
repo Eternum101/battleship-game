@@ -30,6 +30,20 @@ function ComputerBoard({ board, handleComputerCellClick }) {
             <div class="column-header">10</div>
             <GameBoard board={board} handleCellClick={handleComputerCellClick} />
         </div>
+        <div className="enemy-fleet-container">
+            <h1>Destroyed Enemy Ships</h1>
+            <div className="destroyed-enemy-ships">
+            <div class="ships-left">
+                <h2>Destroyer (2)</h2>
+                <h2>Submarine (3)</h2>
+                <h2>Cruiser (3)</h2>
+            </div>
+            <div class="ships-right">
+                <h2>Battleship (4)</h2>
+                <h2>Aircraft Carrier (5)</h2>
+            </div>
+            </div>
+        </div>
     </div>
     )
 }

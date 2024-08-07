@@ -42,7 +42,7 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
             <div className="column-header">8</div>
             <div className="column-header">9</div>
             <div className="column-header">10</div>
-          <GameBoard board={board} handleCellClick={handlePlayerCellClick} />
+          <GameBoard board={board} handleCellClick={handlePlayerCellClick} boardType="player"/>
       </div>
       <div className="fleet-container">
         <h1>Place Fleet</h1>

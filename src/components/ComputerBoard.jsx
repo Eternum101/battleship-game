@@ -28,7 +28,7 @@ function ComputerBoard({ board, handleComputerCellClick }) {
             <div class="column-header">8</div>
             <div class="column-header">9</div>
             <div class="column-header">10</div>
-            <GameBoard board={board} handleCellClick={handleComputerCellClick} />
+            <GameBoard board={board} handleCellClick={handleComputerCellClick} boardType="computer"/>
         </div>
         <div className="enemy-fleet-container">
             <h1>Destroyed Enemy Ships</h1>

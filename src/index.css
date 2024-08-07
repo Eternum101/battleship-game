@@ -3,6 +3,7 @@
 
 :root {
   --grid-player-colour: #b2d4e4;
+  --grid-computer-colour: #D3D3D3;
 }
 
 * {
@@ -27,6 +28,8 @@ body {
 .game-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 500px;
 }
 
 .gameboard-container {
@@ -59,7 +62,6 @@ body {
 .grid .cell {
   border: 1px solid white;
   border-radius: 5px;
-  background-color: var(--grid-player-colour);
   border: 1px solid #fff;
   border-radius: 5px;
   text-align: center;
@@ -68,6 +70,15 @@ body {
   color: #fff;
   user-select: none;
 }
+
+.grid .player-cell {
+  background-color: var(--grid-player-colour);
+}
+
+.grid .computer-cell {
+  background-color: var(--grid-computer-colour);
+}
+
 
 .seperator {
   width: 2px;

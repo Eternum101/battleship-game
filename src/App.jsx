@@ -11,9 +11,9 @@ function App() {
   return (
     <>
     <div className="grid-container">
-      <PlayerBoard board={playerBoard} />
+      <PlayerBoard board={playerBoard} boardType="player"/>
       <div className="seperator"></div>
-      <ComputerBoard board={computerBoard} />
+      <ComputerBoard board={computerBoard} boardType="computer"/>
     </div>
     </>
   )

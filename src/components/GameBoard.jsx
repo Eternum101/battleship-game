@@ -1,9 +1,11 @@
 import React from 'react';
 
-function GameBoard({ board, handleCellClick }) {
+function GameBoard({ board, handleCellClick, boardType }) {
   function Cell({ value, onClick }) {
     return (
-      <button className='cell' onClick={onClick}>
+      <button className={`cell ${boardType}-cell`}
+        onClick={onClick}
+      >
         {value}
       </button>
     );

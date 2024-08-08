@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import GameBoard from "./GameBoard";
 import Ship from './Ship';
 import '../styles/PlayerBoard.css'
 
 function PlayerBoard({ board, handlePlayerCellClick }) {
-  const handleDragStart = (e, ship) => {
-    e.dataTransfer.setData('ship', JSON.stringify(ship));
-  };
+  const [selectedShip, setSelectedShip] = useState(null);
 
   const ships = [
     { length: 5, orientation: 'horizontal' },
@@ -16,33 +14,41 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
     { length: 2, orientation: 'horizontal' }
   ];
 
+  const handleShipClick = (index) => {
+    if (selectedShip === index) {
+      setSelectedShip(null);
+    } else {
+      setSelectedShip(index);
+    }
+  };
+
   return (
     <div className="game-container">
       <h2 className="player-title">YOUR FLEET</h2>
       <div className="gameboard-container">
-            <div className="row-header"></div>
-            <div className="row-header">A</div>
-            <div className="row-header">B</div>
-            <div className="row-header">C</div>
-            <div className="row-header">D</div>
-            <div className="row-header">E</div>
-            <div className="row-header">F</div>
-            <div className="row-header">G</div>
-            <div className="row-header">H</div>
-            <div className="row-header">I</div>
-            <div className="row-header">J</div>
-                
-            <div className="column-header">1</div>
-            <div className="column-header">2</div>
-            <div className="column-header">3</div>
-            <div className="column-header">4</div>
-            <div className="column-header">5</div>
-            <div className="column-header">6</div>
-            <div className="column-header">7</div>
-            <div className="column-header">8</div>
-            <div className="column-header">9</div>
-            <div className="column-header">10</div>
-          <GameBoard board={board} handleCellClick={handlePlayerCellClick} boardType="player"/>
+        <div className="row-header"></div>
+        <div className="row-header">A</div>
+        <div className="row-header">B</div>
+        <div className="row-header">C</div>
+        <div className="row-header">D</div>
+        <div className="row-header">E</div>
+        <div className="row-header">F</div>
+        <div className="row-header">G</div>
+        <div className="row-header">H</div>
+        <div className="row-header">I</div>
+        <div className="row-header">J</div>
+            
+        <div className="column-header">1</div>
+        <div className="column-header">2</div>
+        <div className="column-header">3</div>
+        <div className="column-header">4</div>
+        <div className="column-header">5</div>
+        <div className="column-header">6</div>
+        <div className="column-header">7</div>
+        <div className="column-header">8</div>
+        <div className="column-header">9</div>
+        <div className="column-header">10</div>
+        <GameBoard board={board} handleCellClick={handlePlayerCellClick} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null}/>
       </div>
       <div className="fleet-container">
         <h1>Place Fleet</h1>
@@ -53,17 +59,18 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
         <span className="fleet-info">Drag n' Drop (Press 'R' to Rotate)</span>
         <div className="fleet-draggable">
           {ships.map((ship, index) => (
-              <Ship
-                key={index}
-                length={ship.length}
-                orientation={ship.orientation}
-                onDragStart={(e) => handleDragStart(e, ship)}
-              />
-            ))}
+            <Ship
+              key={index}
+              length={ship.length}
+              orientation={ship.orientation}
+              onClick={() => handleShipClick(index)}
+              isSelected={selectedShip === index}
+            />
+          ))}
         </div>
       </div>
     </div>
-    );
+  );
 }
 
 export default PlayerBoard;

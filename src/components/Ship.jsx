@@ -1,12 +1,12 @@
 import React from 'react';
 
-function Ship({ length, orientation, onDragStart }) {
+function Ship({ length, orientation, onClick, isSelected }) {
   const shipStyle = {
     display: 'flex',
     flexDirection: orientation === 'horizontal' ? 'row' : 'column',
     width: orientation === 'horizontal' ? `${length * 30}px` : '30px',
     height: orientation === 'vertical' ? `${length * 30}px` : '30px',
-    backgroundColor: '#D3D3D3',
+    backgroundColor: isSelected ? '#d6263e' : '#D3D3D3',
     margin: '5px',
     cursor: 'grab',
     borderRadius: '5px',
@@ -28,14 +28,14 @@ function Ship({ length, orientation, onDragStart }) {
   
     return <div style={circleStyle}></div>;
   }
-  
 
   return (
     <div
       className="ship"
       style={shipStyle}
-      draggable
-      onDragStart={onDragStart}
+      onClick={() => {
+        onClick();
+      }}
     >
       {Array.from({ length }).map((_, index) => (
         <Circle key={index} />

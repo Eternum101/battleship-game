@@ -5,14 +5,13 @@ import '../styles/PlayerBoard.css'
 
 function PlayerBoard({ board, handlePlayerCellClick }) {
   const [selectedShip, setSelectedShip] = useState(null);
-
-  const ships = [
+  const [ships, setShips] = useState([
     { length: 5, orientation: 'horizontal' },
     { length: 4, orientation: 'horizontal' },
     { length: 3, orientation: 'horizontal' },
     { length: 3, orientation: 'horizontal' },
     { length: 2, orientation: 'horizontal' }
-  ];
+  ]);
 
   const handleShipClick = (index) => {
     if (selectedShip === index) {
@@ -20,6 +19,27 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
     } else {
       setSelectedShip(index);
     }
+  };
+
+  const handleShipPlacement = () => {
+    if (selectedShip !== null) {
+      const newFleet = ships.filter((_, index) => index !== selectedShip);
+      setShips(newFleet);
+      setSelectedShip(null);
+    }
+  };
+
+  const handleRotate = () => {
+    const newShips = ships.map((ship, index) => {
+      if (index === selectedShip) {
+        return {
+          ...ship,
+          orientation: ship.orientation === 'horizontal' ? 'vertical' : 'horizontal'
+        };
+      }
+      return ship;
+    });
+    setShips(newShips);
   };
 
   return (
@@ -48,15 +68,15 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
         <div className="column-header">8</div>
         <div className="column-header">9</div>
         <div className="column-header">10</div>
-        <GameBoard board={board} handleCellClick={handlePlayerCellClick} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null}/>
+        <GameBoard board={board} handleCellClick={handlePlayerCellClick} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement}/>
       </div>
       <div className="fleet-container">
         <h1>Place Fleet</h1>
         <div className="btn-fleet-container">
           <button className="btn-randomize">Randomize</button>
-          <button className="btn-flip">Flip</button>
+          <button className="btn-rotate" onClick={handleRotate}>Rotate</button>
         </div>
-        <span className="fleet-info">Drag n' Drop (Press 'R' to Rotate)</span>
+        <span className="fleet-info">Choose Ship to Place</span>
         <div className="fleet-draggable">
           {ships.map((ship, index) => (
             <Ship

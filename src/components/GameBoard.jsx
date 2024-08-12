@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-function GameBoard({ board, boardType, selectedShip }) {
+function GameBoard({ board, boardType, selectedShip, onShipPlaced }) {
   const [hoveredCell, setHoveredCell] = useState(null);
+  const [placedShips, setPlacedShips] = useState([]);
 
   useEffect(() => {
+    console.log(`Selected ship: ${selectedShip ? `length=${selectedShip.length}, orientation=${selectedShip.orientation}` : 'none'}`);
   }, [selectedShip]);
 
   const handleMouseEnter = (i, j) => {
@@ -18,10 +20,42 @@ function GameBoard({ board, boardType, selectedShip }) {
     if (!selectedShip) return false;
     const { length, orientation } = selectedShip;
     if (orientation === 'horizontal') {
-      return j + length <= board[0].length;
+      if (j + length > board[0].length) return false;
+      for (let k = 0; k < length; k++) {
+        if (placedShips.some(ship => ship.row === i && ship.col === j + k)) return false;
+      }
     } else {
-      return i + length <= board.length;
+      if (i + length > board.length) return false;
+      for (let k = 0; k < length; k++) {
+        if (placedShips.some(ship => ship.row === i + k && ship.col === j)) return false;
+      }
     }
+    return true;
+  };
+
+  const placeShip = (i, j) => {
+    console.log(`Attempting to place ship at row=${i}, col=${j}`);
+    if (!isValidPlacement(i, j)) {
+      console.log('Invalid placement');
+      return;
+    }
+
+    const { length, orientation } = selectedShip;
+    const newPlacedShips = [...placedShips];
+
+    if (orientation === 'horizontal') {
+      for (let k = 0; k < length; k++) {
+        newPlacedShips.push({ row: i, col: j + k });
+      }
+    } else {
+      for (let k = 0; k < length; k++) {
+        newPlacedShips.push({ row: i + k, col: j });
+      }
+    }
+
+    setPlacedShips(newPlacedShips);
+    onShipPlaced();
+    console.log('Ship placed successfully');
   };
 
   const getCellStyle = (i, j) => {
@@ -34,16 +68,19 @@ function GameBoard({ board, boardType, selectedShip }) {
         return { backgroundColor: '#d6263e' };
       }
     }
+
+    if (placedShips.some(ship => ship.row === i && ship.col === j)) {
+      return { backgroundColor: '#d6263e' };
+    }
+
     return {};
   };
 
-  function Cell({ row, col, value, onClick }) {
+  function Cell({ row, col, value }) {
     return (
       <button
         className={`cell ${boardType}-cell`}
-        onClick={() => {
-          onClick();
-        }}
+        onClick={() => placeShip(row, col)}
         onMouseEnter={() => handleMouseEnter(row, col)}
         onMouseLeave={handleMouseLeave}
         style={getCellStyle(row, col)}
@@ -62,6 +99,7 @@ function GameBoard({ board, boardType, selectedShip }) {
             row={i}
             col={j}
             value={cell}
+            onClick={() => placeShip(i, j)}
             onMouseEnter={() => handleMouseEnter(i, j)}
             onMouseLeave={handleMouseLeave}
           />

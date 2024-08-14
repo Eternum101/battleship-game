@@ -13,6 +13,8 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
     { length: 2, orientation: 'horizontal' }
   ]);
 
+  const [randomShips, setRandomShips] = useState([]);
+
   const handleShipClick = (index) => {
     if (selectedShip === index) {
       setSelectedShip(null);
@@ -42,6 +44,56 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
     setShips(newShips);
   };
 
+  const handleRandomize = () => {
+    const newRandomShips = [];
+    ships.map(ship => {
+      const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+      let row, col;
+  
+      do {
+        row = Math.floor(Math.random() * board.length);
+        col = Math.floor(Math.random() * board[0].length);
+      } while (!isValidRandomPlacement(row, col, ship.length, orientation, newRandomShips));
+  
+      if (orientation === 'horizontal') {
+        for (let k = 0; k < ship.length; k++) {
+          newRandomShips.push({ row, col: col + k });
+        }
+      } else {
+        for (let k = 0; k < ship.length; k++) {
+          newRandomShips.push({ row: row + k, col });
+        }
+      }
+  
+      return { ...ship, orientation };
+    });
+  
+    setRandomShips(newRandomShips);
+    setShips([]);
+  };
+  
+
+  const isValidRandomPlacement = (row, col, length, orientation, randomShips) => {
+    const isAdjacent = (r, c) => {
+      return randomShips.some(ship => 
+        Math.abs(ship.row - r) <= 1 && Math.abs(ship.col - c) <= 1
+      );
+    };
+  
+    if (orientation === 'horizontal') {
+      if (col + length > board[0].length) return false;
+      for (let k = 0; k < length; k++) {
+        if (randomShips.some(ship => ship.row === row && ship.col === col + k) || isAdjacent(row, col + k)) return false;
+      }
+    } else {
+      if (row + length > board.length) return false;
+      for (let k = 0; k < length; k++) {
+        if (randomShips.some(ship => ship.row === row + k && ship.col === col) || isAdjacent(row + k, col)) return false;
+      }
+    }
+    return true;
+  };  
+
   return (
     <div className="game-container">
       <h2 className="player-title">YOUR FLEET</h2>
@@ -68,12 +120,12 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
         <div className="column-header">8</div>
         <div className="column-header">9</div>
         <div className="column-header">10</div>
-        <GameBoard board={board} handleCellClick={handlePlayerCellClick} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement}/>
+        <GameBoard board={board} handleCellClick={handlePlayerCellClick} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={(row, col) => handleShipPlacement(row, col)} randomShips={randomShips}/>
       </div>
       <div className="fleet-container">
         <h1>Place Fleet</h1>
         <div className="btn-fleet-container">
-          <button className="btn-randomize">Randomize</button>
+          <button className="btn-randomize" onClick={handleRandomize}>Randomize</button>
           <button className="btn-rotate" onClick={handleRotate}>Rotate</button>
         </div>
         <span className="fleet-info">Choose Ship to Place</span>

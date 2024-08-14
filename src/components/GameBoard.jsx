@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function GameBoard({ board, boardType, selectedShip, onShipPlaced }) {
+function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips = [] }) {
   const [hoveredCell, setHoveredCell] = useState(null);
   const [placedShips, setPlacedShips] = useState([]);
 
@@ -19,19 +19,29 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced }) {
   const isValidPlacement = (i, j) => {
     if (!selectedShip) return false;
     const { length, orientation } = selectedShip;
+  
+    const isAdjacent = (row, col) => {
+      return placedShips.some(ship => 
+        Math.abs(ship.row - row) <= 1 && Math.abs(ship.col - col) <= 1
+      ) || randomShips.some(ship => 
+        Math.abs(ship.row - row) <= 1 && Math.abs(ship.col - col) <= 1
+      );
+    };
+  
     if (orientation === 'horizontal') {
       if (j + length > board[0].length) return false;
       for (let k = 0; k < length; k++) {
-        if (placedShips.some(ship => ship.row === i && ship.col === j + k)) return false;
+        if (placedShips.some(ship => ship.row === i && ship.col === j + k) || randomShips.some(ship => ship.row === i && ship.col === j + k) || isAdjacent(i, j + k)) return false;
       }
     } else {
       if (i + length > board.length) return false;
       for (let k = 0; k < length; k++) {
-        if (placedShips.some(ship => ship.row === i + k && ship.col === j)) return false;
+        if (placedShips.some(ship => ship.row === i + k && ship.col === j) || randomShips.some(ship => ship.row === i + k && ship.col === j) || isAdjacent(i + k, j)) return false;
       }
     }
     return true;
   };
+  
 
   const placeShip = (i, j) => {
     console.log(`Attempting to place ship at row=${i}, col=${j}`);
@@ -69,7 +79,7 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced }) {
       }
     }
 
-    if (placedShips.some(ship => ship.row === i && ship.col === j)) {
+    if (placedShips.some(ship => ship.row === i && ship.col === j) || randomShips.some(ship => ship.row === i && ship.col === j)) {
       return { backgroundColor: '#d6263e' };
     }
 

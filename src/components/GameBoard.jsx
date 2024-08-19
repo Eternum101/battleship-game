@@ -65,7 +65,6 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
 
     setPlacedShips(newPlacedShips);
     onShipPlaced();
-    console.log('Ship placed successfully');
   };
 
   const getCellStyle = (i, j) => {

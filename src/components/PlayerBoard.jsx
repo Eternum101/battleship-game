@@ -14,12 +14,16 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
   ]);
 
   const [randomShips, setRandomShips] = useState([]);
+  const [isShipSelected, setIsShipSelected] = useState(false);
+  const [allShipsPlaced, setAllShipsPlaced] = useState(false);
 
   const handleShipClick = (index) => {
     if (selectedShip === index) {
       setSelectedShip(null);
+      setIsShipSelected(false);
     } else {
       setSelectedShip(index);
+      setIsShipSelected(true);
     }
   };
 
@@ -28,6 +32,10 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
       const newFleet = ships.filter((_, index) => index !== selectedShip);
       setShips(newFleet);
       setSelectedShip(null);
+      setIsShipSelected(true);
+      if (newFleet.length === 0) {
+        setAllShipsPlaced(true);
+      }
     }
   };
 
@@ -46,7 +54,15 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
 
   const handleRandomize = () => {
     const newRandomShips = [];
-    ships.map(ship => {
+    const newShips = [
+      { length: 5, orientation: 'horizontal' },
+      { length: 4, orientation: 'horizontal' },
+      { length: 3, orientation: 'horizontal' },
+      { length: 3, orientation: 'horizontal' },
+      { length: 2, orientation: 'horizontal' }
+    ];
+
+    newShips.map(ship => {
       const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
       let row, col;
   
@@ -70,8 +86,8 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
   
     setRandomShips(newRandomShips);
     setShips([]);
+    setAllShipsPlaced(true);
   };
-  
 
   const isValidRandomPlacement = (row, col, length, orientation, randomShips) => {
     const isAdjacent = (r, c) => {
@@ -125,8 +141,8 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
       <div className="fleet-container">
         <h1>Place Fleet</h1>
         <div className="btn-fleet-container">
-          <button className="btn-randomize" onClick={handleRandomize}>Randomize</button>
-          <button className="btn-rotate" onClick={handleRotate}>Rotate</button>
+        <button className="btn-randomize" onClick={handleRandomize} disabled={isShipSelected}>Randomize</button>
+        <button className="btn-rotate" onClick={handleRotate} disabled={allShipsPlaced}>Rotate</button>
         </div>
         <span className="fleet-info">Choose Ship to Place</span>
         <div className="fleet-draggable">

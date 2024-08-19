@@ -62,6 +62,11 @@
     text-decoration: none;
 }
 
+.btn-randomize:disabled, .btn-rotate:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }  
+
 .fleet-info {
     font-size: 1.1rem;
     font-weight: bold;

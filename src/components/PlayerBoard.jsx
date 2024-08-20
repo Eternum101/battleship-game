@@ -144,7 +144,7 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
         <button className="btn-randomize" onClick={handleRandomize} disabled={isShipSelected}>Randomize</button>
         <button className="btn-rotate" onClick={handleRotate} disabled={allShipsPlaced}>Rotate</button>
         </div>
-        <span className="fleet-info">Choose Ship to Place</span>
+        <span className="fleet-info" style={{ display: allShipsPlaced ? "none" : "block" }}>Choose Ship to Place</span>
         <div className="fleet-draggable">
           {ships.map((ship, index) => (
             <Ship

@@ -3,7 +3,7 @@ import GameBoard from "./GameBoard";
 import Ship from './Ship';
 import '../styles/PlayerBoard.css'
 
-function PlayerBoard({ board, handlePlayerCellClick }) {
+function PlayerBoard({ board }) {
   const [selectedShip, setSelectedShip] = useState(null);
   const [ships, setShips] = useState([
     { length: 5, orientation: 'horizontal' },
@@ -136,7 +136,7 @@ function PlayerBoard({ board, handlePlayerCellClick }) {
         <div className="column-header">8</div>
         <div className="column-header">9</div>
         <div className="column-header">10</div>
-        <GameBoard board={board} handleCellClick={handlePlayerCellClick} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={(row, col) => handleShipPlacement(row, col)} randomShips={randomShips}/>
+        <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips}/>
       </div>
       <div className="fleet-container">
         <h1>Place Fleet</h1>

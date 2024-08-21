@@ -69,6 +69,7 @@ body {
   font-weight: bold;
   color: #fff;
   user-select: none;
+  cursor: grab;
 }
 
 .grid .player-cell {

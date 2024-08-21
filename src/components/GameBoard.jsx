@@ -4,10 +4,6 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
   const [hoveredCell, setHoveredCell] = useState(null);
   const [placedShips, setPlacedShips] = useState([]);
 
-  useEffect(() => {
-    console.log(`Selected ship: ${selectedShip ? `length=${selectedShip.length}, orientation=${selectedShip.orientation}` : 'none'}`);
-  }, [selectedShip]);
-
   const handleMouseEnter = (i, j) => {
     setHoveredCell({ row: i, col: j });
   };
@@ -42,11 +38,8 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     return true;
   };
   
-
   const placeShip = (i, j) => {
-    console.log(`Attempting to place ship at row=${i}, col=${j}`);
     if (!isValidPlacement(i, j)) {
-      console.log('Invalid placement');
       return;
     }
 

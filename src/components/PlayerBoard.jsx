@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import GameBoard from "./GameBoard";
 import Ship from './Ship';
-import '../styles/PlayerBoard.css'
+import '../styles/PlayerBoard.css';
 
 function PlayerBoard({ board }) {
   const [selectedShip, setSelectedShip] = useState(null);
@@ -111,53 +111,31 @@ function PlayerBoard({ board }) {
   };  
 
   return (
-    <div className="game-container">
-      <h2 className="player-title">YOUR FLEET</h2>
-      <div className="gameboard-container">
-        <div className="row-header"></div>
-        <div className="row-header">A</div>
-        <div className="row-header">B</div>
-        <div className="row-header">C</div>
-        <div className="row-header">D</div>
-        <div className="row-header">E</div>
-        <div className="row-header">F</div>
-        <div className="row-header">G</div>
-        <div className="row-header">H</div>
-        <div className="row-header">I</div>
-        <div className="row-header">J</div>
-            
-        <div className="column-header">1</div>
-        <div className="column-header">2</div>
-        <div className="column-header">3</div>
-        <div className="column-header">4</div>
-        <div className="column-header">5</div>
-        <div className="column-header">6</div>
-        <div className="column-header">7</div>
-        <div className="column-header">8</div>
-        <div className="column-header">9</div>
-        <div className="column-header">10</div>
-        <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips}/>
-      </div>
-      <div className="fleet-container">
-        <h1>Place Fleet</h1>
-        <div className="btn-fleet-container">
-        <button className="btn-randomize" onClick={handleRandomize} disabled={isShipSelected}>Randomize</button>
-        <button className="btn-rotate" onClick={handleRotate} disabled={allShipsPlaced}>Rotate</button>
+      <div className="game-container">
+        <h2 className="player-title">YOUR FLEET</h2>
+        <div className="gameboard-container">
+          <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips}/>
         </div>
-        <span className="fleet-info" style={{ display: allShipsPlaced ? "none" : "block" }}>Choose Ship to Place</span>
-        <div className="fleet-draggable">
-          {ships.map((ship, index) => (
-            <Ship
-              key={index}
-              length={ship.length}
-              orientation={ship.orientation}
-              onClick={() => handleShipClick(index)}
-              isSelected={selectedShip === index}
-            />
-          ))}
+        <div className="fleet-container">
+          <h1>Place Fleet</h1>
+          <div className="btn-fleet-container">
+            <button className="btn-randomize" onClick={handleRandomize} disabled={isShipSelected}>Randomize</button>
+            <button className="btn-rotate" onClick={handleRotate} disabled={allShipsPlaced}>Rotate</button>
+          </div>
+          <span className="fleet-info" style={{ display: allShipsPlaced ? "none" : "block" }}>Choose Ship to Place</span>
+          <div className="fleet-draggable">
+            {ships.map((ship, index) => (
+              <Ship
+                key={index}
+                length={ship.length}
+                orientation={ship.orientation}
+                onClick={() => handleShipClick(index)}
+                isSelected={selectedShip === index}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
   );
 }
 

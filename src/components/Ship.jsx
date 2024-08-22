@@ -1,6 +1,15 @@
 import React from 'react';
+import { useDrag } from 'react-dnd';
 
 function Ship({ length, orientation, onClick, isSelected }) {
+  const [{ isDragging }, drag] = useDrag({
+    type: 'ship',
+    item: { length, orientation },
+    collect: monitor => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
   const shipStyle = {
     display: 'flex',
     flexDirection: orientation === 'horizontal' ? 'row' : 'column',
@@ -14,7 +23,8 @@ function Ship({ length, orientation, onClick, isSelected }) {
     fontWeight: 'bold',
     fontSize: '1.2rem',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    opacity: isDragging ? 0.5 : 1,
   };
 
   function Circle() {
@@ -31,6 +41,7 @@ function Ship({ length, orientation, onClick, isSelected }) {
 
   return (
     <div
+      ref={drag}
       className="ship"
       style={shipStyle}
       onClick={() => {

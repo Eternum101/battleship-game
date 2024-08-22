@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useDrop } from 'react-dnd';
 
 function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips = [] }) {
-  const [hoveredCell, setHoveredCell] = useState(null);
   const [placedShips, setPlacedShips] = useState([]);
 
   const handleMouseEnter = (i, j) => {
@@ -37,9 +37,10 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     }
     return true;
   };
-  
-  const placeShip = (i, j) => {
+
+  const placeShip = useCallback((i, j) => {
     if (!isValidPlacement(i, j)) {
+      console.log("Invalid placement at:", i, j);
       return;
     }
 
@@ -57,32 +58,29 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     }
 
     setPlacedShips(newPlacedShips);
+    console.log("Placed ships:", newPlacedShips);
     onShipPlaced();
-  };
+  }, [isValidPlacement, placedShips, selectedShip, onShipPlaced]);
 
   const getCellStyle = (i, j) => {
-    if (hoveredCell && isValidPlacement(hoveredCell.row, hoveredCell.col)) {
-      const { row, col } = hoveredCell;
-      const { length, orientation } = selectedShip;
-      if (orientation === 'horizontal' && i === row && j >= col && j < col + length) {
-        return { backgroundColor: '#d6263e' };
-      } else if (orientation === 'vertical' && j === col && i >= row && i < row + length) {
-        return { backgroundColor: '#d6263e' };
-      }
-    }
-
     if (placedShips.some(ship => ship.row === i && ship.col === j) || randomShips.some(ship => ship.row === i && ship.col === j)) {
       return { backgroundColor: '#d6263e' };
     }
-
-    return {};
-  };
+  }; 
 
   function Cell({ row, col, value }) {
+    const [{ isOver }, drop] = useDrop({
+      accept: 'ship',
+      drop: () => placeShip(row, col),
+      collect: monitor => ({
+        isOver: !!monitor.isOver(),
+      }),
+    });
+
     return (
       <button
+        ref={drop}
         className={`cell ${boardType}-cell`}
-        onClick={() => placeShip(row, col)}
         onMouseEnter={() => handleMouseEnter(row, col)}
         onMouseLeave={handleMouseLeave}
         style={getCellStyle(row, col)}
@@ -101,9 +99,6 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
             row={i}
             col={j}
             value={cell}
-            onClick={() => placeShip(i, j)}
-            onMouseEnter={() => handleMouseEnter(i, j)}
-            onMouseLeave={handleMouseLeave}
           />
         ))
       )}

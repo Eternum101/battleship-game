@@ -40,17 +40,12 @@ function PlayerBoard({ board }) {
   };
 
   const handleRotate = () => {
-    const newShips = ships.map((ship, index) => {
-      if (index === selectedShip) {
-        return {
-          ...ship,
-          orientation: ship.orientation === 'horizontal' ? 'vertical' : 'horizontal'
-        };
-      }
-      return ship;
-    });
+    const newShips = ships.map(ship => ({
+      ...ship,
+      orientation: ship.orientation === 'horizontal' ? 'vertical' : 'horizontal'
+    }));
     setShips(newShips);
-  };
+  };  
 
   const handleRandomize = () => {
     const newRandomShips = [];
@@ -114,15 +109,36 @@ function PlayerBoard({ board }) {
       <div className="game-container">
         <h2 className="player-title">YOUR FLEET</h2>
         <div className="gameboard-container">
+        <div class="row-header"></div>
+            <div class="row-header">A</div>
+            <div class="row-header">B</div>
+            <div class="row-header">C</div>
+            <div class="row-header">D</div>
+            <div class="row-header">E</div>
+            <div class="row-header">F</div>
+            <div class="row-header">G</div>
+            <div class="row-header">H</div>
+            <div class="row-header">I</div>
+            <div class="row-header">J</div>
+                
+            <div class="column-header">1</div>
+            <div class="column-header">2</div>
+            <div class="column-header">3</div>
+            <div class="column-header">4</div>
+            <div class="column-header">5</div>
+            <div class="column-header">6</div>
+            <div class="column-header">7</div>
+            <div class="column-header">8</div>
+            <div class="column-header">9</div>
+            <div class="column-header">10</div>
           <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips}/>
         </div>
         <div className="fleet-container">
-          <h1>Place Fleet</h1>
+          <h1>Place Fleet (Drag 'N' Drop)</h1>
           <div className="btn-fleet-container">
             <button className="btn-randomize" onClick={handleRandomize} disabled={isShipSelected}>Randomize</button>
             <button className="btn-rotate" onClick={handleRotate} disabled={allShipsPlaced}>Rotate</button>
           </div>
-          <span className="fleet-info" style={{ display: allShipsPlaced ? "none" : "block" }}>Choose Ship to Place</span>
           <div className="fleet-draggable">
             {ships.map((ship, index) => (
               <Ship

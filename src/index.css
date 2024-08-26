@@ -23,6 +23,7 @@ body {
 .grid-container {
   display: flex;
   gap: 80px;
+  margin: 50px;
 }
 
 .game-container {
@@ -79,7 +80,6 @@ body {
 .grid .computer-cell {
   background-color: var(--grid-computer-colour);
 }
-
 
 .seperator {
   width: 2px;

@@ -1,48 +1,45 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useDrop } from 'react-dnd';
+import _ from 'lodash';
 
 function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips = [] }) {
   const [placedShips, setPlacedShips] = useState([]);
+  const [validCells, setValidCells] = useState([]);
 
-  const handleMouseEnter = (i, j) => {
-    setHoveredCell({ row: i, col: j });
-  };
+  const prevHoverCell = useRef(null);
 
-  const handleMouseLeave = () => {
-    setHoveredCell(null);
-  };
-
-  const isValidPlacement = (i, j) => {
+  const isValidPlacement = useCallback((i, j) => {
     if (!selectedShip) return false;
     const { length, orientation } = selectedShip;
-  
+
     const isAdjacent = (row, col) => {
-      return placedShips.some(ship => 
+      return placedShips.some(ship =>
         Math.abs(ship.row - row) <= 1 && Math.abs(ship.col - col) <= 1
-      ) || randomShips.some(ship => 
+      ) || randomShips.some(ship =>
         Math.abs(ship.row - row) <= 1 && Math.abs(ship.col - col) <= 1
       );
     };
-  
+
     if (orientation === 'horizontal') {
       if (j + length > board[0].length) return false;
       for (let k = 0; k < length; k++) {
-        if (placedShips.some(ship => ship.row === i && ship.col === j + k) || randomShips.some(ship => ship.row === i && ship.col === j + k) || isAdjacent(i, j + k)) return false;
+        if (placedShips.some(ship => ship.row === i && ship.col === j + k) ||
+            randomShips.some(ship => ship.row === i && ship.col === j + k) ||
+            isAdjacent(i, j + k)) return false;
       }
     } else {
       if (i + length > board.length) return false;
       for (let k = 0; k < length; k++) {
-        if (placedShips.some(ship => ship.row === i + k && ship.col === j) || randomShips.some(ship => ship.row === i + k && ship.col === j) || isAdjacent(i + k, j)) return false;
+        if (placedShips.some(ship => ship.row === i + k && ship.col === j) ||
+            randomShips.some(ship => ship.row === i + k && ship.col === j) ||
+            isAdjacent(i + k, j)) return false;
       }
     }
     return true;
-  };
+  }, [placedShips, randomShips, selectedShip]);
 
   const placeShip = useCallback((i, j) => {
-    if (!isValidPlacement(i, j)) {
-      console.log("Invalid placement at:", i, j);
-      return;
-    }
+    if (!isValidPlacement(i, j)) return;
 
     const { length, orientation } = selectedShip;
     const newPlacedShips = [...placedShips];
@@ -58,31 +55,62 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     }
 
     setPlacedShips(newPlacedShips);
-    console.log("Placed ships:", newPlacedShips);
+    setValidCells([]);
     onShipPlaced();
   }, [isValidPlacement, placedShips, selectedShip, onShipPlaced]);
 
+  const handleHover = useCallback(
+    _.throttle((i, j) => {
+      if (prevHoverCell.current && prevHoverCell.current.row === i && prevHoverCell.current.col === j) {
+        return;
+      }
+
+      prevHoverCell.current = { row: i, col: j };
+
+      if (!selectedShip || !isValidPlacement(i, j)) return;
+
+      const { length, orientation } = selectedShip;
+      const newValidCells = [];
+
+      if (orientation === 'horizontal') {
+        for (let k = 0; k < length; k++) {
+          newValidCells.push({ row: i, col: j + k });
+        }
+      } else {
+        for (let k = 0; k < length; k++) {
+          newValidCells.push({ row: i + k, col: j });
+        }
+      }
+
+      setValidCells(newValidCells);
+    }, 100),
+    [selectedShip, isValidPlacement]
+  );
+
   const getCellStyle = (i, j) => {
-    if (placedShips.some(ship => ship.row === i && ship.col === j) || randomShips.some(ship => ship.row === i && ship.col === j)) {
+    if (placedShips.some(ship => ship.row === i && ship.col === j) ||
+        randomShips.some(ship => ship.row === i && ship.col === j)) {
       return { backgroundColor: '#d6263e' };
     }
-  }; 
+
+    if (validCells.some(cell => cell.row === i && cell.col === j)) {
+      return { backgroundColor: '#d46776' };
+    }
+
+    return {};
+  };
 
   function Cell({ row, col, value }) {
-    const [{ isOver }, drop] = useDrop({
+    const [, drop] = useDrop({
       accept: 'ship',
       drop: () => placeShip(row, col),
-      collect: monitor => ({
-        isOver: !!monitor.isOver(),
-      }),
+      hover: () => handleHover(row, col),
     });
 
     return (
       <button
         ref={drop}
         className={`cell ${boardType}-cell`}
-        onMouseEnter={() => handleMouseEnter(row, col)}
-        onMouseLeave={handleMouseLeave}
         style={getCellStyle(row, col)}
       >
         {value}

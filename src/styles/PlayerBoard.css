@@ -78,3 +78,98 @@
     align-items: center;
     justify-content: center;
 }
+
+.btn-start-game {
+  z-index: 1;
+  position: relative;
+  padding: 10px 30px;
+  margin-bottom: 30px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--accent-colour);
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid var(--accent-colour);
+  transition: color 0.5s;
+  cursor: pointer;
+  border-radius: 30px;
+  letter-spacing: 1px;
+}
+
+.btn-start-game:before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--accent-colour);
+  border-radius: 30px;
+}
+
+.btn-start-game:hover {
+  color: #FFFFFF;
+  border-radius: 30px;
+}
+
+.btn-start-game:hover:after {
+  transition: all 0.3s;
+  left: 0;
+  top: 0;
+  border-radius: 30px;
+}
+
+.btn-start-game__inner {
+  z-index: -1;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  background: #ffffff;
+}
+
+.btn-start-game__blobs {
+  position: relative;
+  display: block;
+  height: 100%;
+  filter: url('#goo');
+}
+
+.btn-start-game__blob {
+  position: absolute;
+  top: 2px;
+  width: 25%;
+  height: 100%;
+  background: var(--accent-colour);
+  border-radius: 100%;
+  transform: translate3d(0, 150%, 0) scale(1.7);
+  transition: transform 0.45s;
+}
+
+.btn-start-game__blob:nth-child(1) {
+  left: 0;
+  transition-delay: 0s;
+}
+
+.btn-start-game__blob:nth-child(2) {
+  left: 25%;
+  transition-delay: 0.08s;
+}
+
+.btn-start-game__blob:nth-child(3) {
+  left: 50%;
+  transition-delay: 0.16s;
+}
+
+.btn-start-game__blob:nth-child(4) {
+  left: 75%;
+  transition-delay: 0.24s;
+}
+
+.btn-start-game:hover .btn-start-game__blob {
+  transform: translateZ(0) scale(1.7);
+}

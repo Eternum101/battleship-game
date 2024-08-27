@@ -103,7 +103,12 @@ function PlayerBoard({ board }) {
       }
     }
     return true;
-  };  
+  };
+  
+  const handleStartGame = () => {
+    console.log("Game started!");
+    // Additional logic to start the game
+  };
 
   return (
       <div className="game-container">
@@ -150,6 +155,19 @@ function PlayerBoard({ board }) {
               />
             ))}
           </div>
+          {allShipsPlaced && (
+      <button className="btn-start-game">
+        Start Game
+        <span className="btn-start-game__inner">
+          <span className="btn-start-game__blobs">
+            <span className="btn-start-game__blob"></span>
+            <span className="btn-start-game__blob"></span>
+            <span className="btn-start-game__blob"></span>
+            <span className="btn-start-game__blob"></span>
+          </span>
+        </span>
+      </button>
+    )}
         </div>
       </div>
   );

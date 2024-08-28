@@ -100,7 +100,9 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     return {};
   };
 
-  function Cell({ row, col, value }) {
+  function Cell({ row, col }) {
+    const cellValue = board[row][col]; // Get the cell value from the board
+
     const [, drop] = useDrop({
       accept: 'ship',
       drop: () => placeShip(row, col),
@@ -113,7 +115,7 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
         className={`cell ${boardType}-cell`}
         style={getCellStyle(row, col)}
       >
-        {value}
+        {cellValue ? `${cellValue.length || 'Ship'}` : ''}
       </button>
     );
   }
@@ -121,12 +123,11 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
   return (
     <div className='grid'>
       {board.map((row, i) =>
-        row.map((cell, j) => (
+        row.map((_, j) => (
           <Cell
             key={`${i}-${j}`}
             row={i}
             col={j}
-            value={cell}
           />
         ))
       )}

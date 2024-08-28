@@ -3,7 +3,7 @@ import GameBoard from "./GameBoard";
 import Ship from './Ship';
 import '../styles/PlayerBoard.css';
 
-function PlayerBoard({ board }) {
+function PlayerBoard({ board, isGameStarted, onGameStart }) {
   const [selectedShip, setSelectedShip] = useState(null);
   const [ships, setShips] = useState([
     { length: 5, orientation: 'horizontal' },
@@ -45,7 +45,7 @@ function PlayerBoard({ board }) {
       orientation: ship.orientation === 'horizontal' ? 'vertical' : 'horizontal'
     }));
     setShips(newShips);
-  };  
+  };
 
   const handleRandomize = () => {
     const newRandomShips = [];
@@ -60,12 +60,12 @@ function PlayerBoard({ board }) {
     newShips.map(ship => {
       const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
       let row, col;
-  
+
       do {
         row = Math.floor(Math.random() * board.length);
         col = Math.floor(Math.random() * board[0].length);
       } while (!isValidRandomPlacement(row, col, ship.length, orientation, newRandomShips));
-  
+
       if (orientation === 'horizontal') {
         for (let k = 0; k < ship.length; k++) {
           newRandomShips.push({ row, col: col + k });
@@ -75,10 +75,10 @@ function PlayerBoard({ board }) {
           newRandomShips.push({ row: row + k, col });
         }
       }
-  
+
       return { ...ship, orientation };
     });
-  
+
     setRandomShips(newRandomShips);
     setShips([]);
     setAllShipsPlaced(true);
@@ -90,7 +90,7 @@ function PlayerBoard({ board }) {
         Math.abs(ship.row - r) <= 1 && Math.abs(ship.col - c) <= 1
       );
     };
-  
+
     if (orientation === 'horizontal') {
       if (col + length > board[0].length) return false;
       for (let k = 0; k < length; k++) {
@@ -104,72 +104,74 @@ function PlayerBoard({ board }) {
     }
     return true;
   };
-  
+
   const handleStartGame = () => {
-    console.log("Game started!");
-    // Additional logic to start the game
+    onGameStart();
   };
 
   return (
-      <div className="game-container">
-        <h2 className="player-title">YOUR FLEET</h2>
-        <div className="gameboard-container">
-        <div class="row-header"></div>
-            <div class="row-header">A</div>
-            <div class="row-header">B</div>
-            <div class="row-header">C</div>
-            <div class="row-header">D</div>
-            <div class="row-header">E</div>
-            <div class="row-header">F</div>
-            <div class="row-header">G</div>
-            <div class="row-header">H</div>
-            <div class="row-header">I</div>
-            <div class="row-header">J</div>
-                
-            <div class="column-header">1</div>
-            <div class="column-header">2</div>
-            <div class="column-header">3</div>
-            <div class="column-header">4</div>
-            <div class="column-header">5</div>
-            <div class="column-header">6</div>
-            <div class="column-header">7</div>
-            <div class="column-header">8</div>
-            <div class="column-header">9</div>
-            <div class="column-header">10</div>
-          <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips}/>
-        </div>
-        <div className="fleet-container">
-          <h1>Place Fleet (Drag 'N' Drop)</h1>
+    <div className="game-container">
+      <h2 className="player-title">YOUR FLEET</h2>
+      <div className="gameboard-container">
+        <div className="row-header"></div>
+        <div className="row-header">A</div>
+        <div className="row-header">B</div>
+        <div className="row-header">C</div>
+        <div className="row-header">D</div>
+        <div className="row-header">E</div>
+        <div className="row-header">F</div>
+        <div className="row-header">G</div>
+        <div className="row-header">H</div>
+        <div className="row-header">I</div>
+        <div className="row-header">J</div>
+
+        <div className="column-header">1</div>
+        <div className="column-header">2</div>
+        <div className="column-header">3</div>
+        <div className="column-header">4</div>
+        <div className="column-header">5</div>
+        <div className="column-header">6</div>
+        <div className="column-header">7</div>
+        <div className="column-header">8</div>
+        <div className="column-header">9</div>
+        <div className="column-header">10</div>
+
+        <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips} />
+      </div>
+      <div className="fleet-container">
+        {!isGameStarted && <h1>Place Fleet (Drag 'N' Drop)</h1>}
+        {!isGameStarted && (
           <div className="btn-fleet-container">
             <button className="btn-randomize" onClick={handleRandomize} disabled={isShipSelected}>Randomize</button>
             <button className="btn-rotate" onClick={handleRotate} disabled={allShipsPlaced}>Rotate</button>
           </div>
-          <div className="fleet-draggable">
-            {ships.map((ship, index) => (
-              <Ship
-                key={index}
-                length={ship.length}
-                orientation={ship.orientation}
-                onClick={() => handleShipClick(index)}
-                isSelected={selectedShip === index}
-              />
-            ))}
-          </div>
-          {allShipsPlaced && (
-      <button className="btn-start-game">
-        Start Game
-        <span className="btn-start-game__inner">
-          <span className="btn-start-game__blobs">
-            <span className="btn-start-game__blob"></span>
-            <span className="btn-start-game__blob"></span>
-            <span className="btn-start-game__blob"></span>
-            <span className="btn-start-game__blob"></span>
-          </span>
-        </span>
-      </button>
-    )}
+        )}
+        <div className="fleet-draggable">
+          {ships.map((ship, index) => (
+            <Ship
+              key={index}
+              length={ship.length}
+              orientation={ship.orientation}
+              onClick={() => handleShipClick(index)}
+              isSelected={selectedShip === index}
+            />
+          ))}
         </div>
+        {allShipsPlaced && !isGameStarted && (
+          <button className="btn-start-game" onClick={handleStartGame}>
+            Start Game
+            <span className="btn-start-game__inner">
+              <span className="btn-start-game__blobs">
+                <span className="btn-start-game__blob"></span>
+                <span className="btn-start-game__blob"></span>
+                <span className="btn-start-game__blob"></span>
+                <span className="btn-start-game__blob"></span>
+              </span>
+            </span>
+          </button>
+        )}
       </div>
+    </div>
   );
 }
 

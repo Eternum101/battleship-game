@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import _ from 'lodash';
 
-function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips = [] }) {
+function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips = [], isGameStarted }) {
   const [placedShips, setPlacedShips] = useState([]);
   const [validCells, setValidCells] = useState([]);
 
@@ -96,26 +96,29 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     if (validCells.some(cell => cell.row === i && cell.col === j)) {
       return { backgroundColor: '#d46776' };
     }
-
-    return {};
   };
 
-  function Cell({ row, col }) {
-    const cellValue = board[row][col]; // Get the cell value from the board
-
+  function Cell({ row, col, value }) {
     const [, drop] = useDrop({
       accept: 'ship',
       drop: () => placeShip(row, col),
       hover: () => handleHover(row, col),
     });
 
+    const getDotStyle = () => {
+      if (value === '.') {
+        return { fontSize: '2rem', lineHeight: '1rem' };
+      }
+      return {};
+    };
+
     return (
       <button
         ref={drop}
         className={`cell ${boardType}-cell`}
-        style={getCellStyle(row, col)}
+        style={{ ...getCellStyle(row, col), ...getDotStyle() }}
       >
-        {cellValue ? `${cellValue.length || 'Ship'}` : ''}
+        {value === '.' ? '•' : value}
       </button>
     );
   }
@@ -123,11 +126,12 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
   return (
     <div className='grid'>
       {board.map((row, i) =>
-        row.map((_, j) => (
+        row.map((cell, j) => (
           <Cell
             key={`${i}-${j}`}
             row={i}
             col={j}
+            value={board[i][j]} 
           />
         ))
       )}

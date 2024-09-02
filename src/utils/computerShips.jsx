@@ -20,10 +20,10 @@ export const randomizeComputerShips = (board) => {
 
         for (let k = 0; k < ship.length; k++) {
             if (orientation === 'horizontal') {
-                newBoard[row][col + k] = ship;
+                newBoard[row][col + k] = '.';
                 newRandomShips.push({ row, col: col + k });
             } else {
-                newBoard[row + k][col] = ship;
+                newBoard[row + k][col] = '.';
                 newRandomShips.push({ row: row + k, col });
             }
         }

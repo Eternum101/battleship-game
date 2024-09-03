@@ -2,7 +2,7 @@ import React from "react";
 import GameBoard from "./GameBoard";
 import '../styles/ComputerBoard.css';
 
-function ComputerBoard({ board }) {
+function ComputerBoard({ board, isGameStarted }) {
     return (
         <div className="game-container">
             <h2 className="computer-title">ENEMY FLEET</h2>
@@ -30,7 +30,7 @@ function ComputerBoard({ board }) {
                 <div className="column-header">9</div>
                 <div className="column-header">10</div>
                     
-                <GameBoard board={board} boardType="computer" />
+                <GameBoard board={board} boardType="computer" isGameStarted={isGameStarted}/>
             </div>
             <div className="enemy-fleet-container">
                 <h1>Destroyed Enemy Ships</h1>

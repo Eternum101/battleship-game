@@ -136,7 +136,7 @@ function PlayerBoard({ board, isGameStarted, onGameStart }) {
         <div className="column-header">9</div>
         <div className="column-header">10</div>
 
-        <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips} />
+        <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips} isGameStarted={isGameStarted}/>
       </div>
       <div className="fleet-container">
         {!isGameStarted && <h1>Place Fleet (Drag 'N' Drop)</h1>}

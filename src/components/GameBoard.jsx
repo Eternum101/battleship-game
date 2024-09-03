@@ -5,6 +5,8 @@ import _ from 'lodash';
 function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips = [], isGameStarted }) {
   const [placedShips, setPlacedShips] = useState([]);
   const [validCells, setValidCells] = useState([]);
+  const [cellValues, setCellValues] = useState(board);
+  const [selectedCell, setSelectedCell] = useState(null);
 
   const prevHoverCell = useRef(null);
 
@@ -98,6 +100,26 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     }
   };
 
+  const handleCellClick = (i, j) => {
+    if (!isGameStarted || boardType !== 'computer') return;
+
+    if (selectedCell && selectedCell.row === i && selectedCell.col === j) {
+      return; 
+    }
+
+    setSelectedCell({ row: i, col: j });
+  };
+
+  const handleHitClick = () => {
+    if (!selectedCell) return;
+
+    const { row, col } = selectedCell;
+    const newCellValues = [...cellValues];
+    newCellValues[row][col] = '•';
+    setCellValues(newCellValues);
+    setSelectedCell(null);
+  };
+
   function Cell({ row, col, value }) {
     const [, drop] = useDrop({
       accept: 'ship',
@@ -117,21 +139,26 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
         ref={drop}
         className={`cell ${boardType}-cell`}
         style={{ ...getCellStyle(row, col), ...getDotStyle() }}
+        onClick={() => handleCellClick(row, col)}
       >
-        {value === '.' ? '•' : value}
+        {selectedCell && selectedCell.row === row && selectedCell.col === col ? (
+          <button className="btn-hit" onClick={() => handleHitClick(row, col)}>HIT</button>
+        ) : (
+          value === '.' ? '•' : value
+        )}
       </button>
     );
   }
 
   return (
     <div className='grid'>
-      {board.map((row, i) =>
+      {cellValues.map((row, i) =>
         row.map((cell, j) => (
           <Cell
             key={`${i}-${j}`}
             row={i}
             col={j}
-            value={board[i][j]} 
+            value={cell} 
           />
         ))
       )}

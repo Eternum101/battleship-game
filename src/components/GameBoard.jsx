@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import _ from 'lodash';
 
@@ -9,6 +9,10 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
   const [selectedCell, setSelectedCell] = useState(null);
 
   const prevHoverCell = useRef(null);
+
+  useEffect(() => {
+    setCellValues(board);
+  }, [board]);
 
   const isValidPlacement = useCallback((i, j) => {
     if (!selectedShip) return false;

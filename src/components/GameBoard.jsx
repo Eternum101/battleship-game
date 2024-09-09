@@ -94,16 +94,24 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
   );
 
   const getCellStyle = (i, j) => {
+    if (cellValues[i][j] === '💥') {
+      return { color: '#d6263e' , fontSize: '25px' };
+    }
+  
+    if (cellValues[i][j] === '•') {
+      return { color: 'gray', fontSize: '65px'};
+    }
+  
     if (placedShips.some(ship => ship.row === i && ship.col === j) ||
         randomShips.some(ship => ship.row === i && ship.col === j)) {
       return { backgroundColor: '#d6263e' };
     }
-
+  
     if (validCells.some(cell => cell.row === i && cell.col === j)) {
       return { backgroundColor: '#d46776' };
     }
   };
-
+  
   const handleCellClick = (i, j) => {
     if (!isGameStarted || boardType !== 'computer') return;
 
@@ -116,13 +124,19 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
 
   const handleHitClick = () => {
     if (!selectedCell) return;
-
+  
     const { row, col } = selectedCell;
     const newCellValues = [...cellValues];
-    newCellValues[row][col] = '•';
+  
+    if (board[row][col] === '.') {
+      newCellValues[row][col] = '💥';
+    } else {
+      newCellValues[row][col] = '•';
+    }
+  
     setCellValues(newCellValues);
     setSelectedCell(null);
-  };
+  };  
 
   function Cell({ row, col, value }) {
     const [, drop] = useDrop({
@@ -131,18 +145,11 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
       hover: () => handleHover(row, col),
     });
 
-    const getDotStyle = () => {
-      if (value === '.') {
-        return { fontSize: '2rem', lineHeight: '1rem' };
-      }
-      return {};
-    };
-
     return (
       <button
         ref={drop}
         className={`cell ${boardType}-cell`}
-        style={{ ...getCellStyle(row, col), ...getDotStyle() }}
+        style={{ ...getCellStyle(row, col) }}
         onClick={() => handleCellClick(row, col)}
       >
         {selectedCell && selectedCell.row === row && selectedCell.col === col ? (

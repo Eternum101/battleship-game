@@ -115,6 +115,10 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
   const handleCellClick = (i, j) => {
     if (!isGameStarted || boardType !== 'computer') return;
 
+    if (cellValues[i][j] === '💥' || cellValues[i][j] === '•') {
+      return;
+    }
+
     if (selectedCell && selectedCell.row === i && selectedCell.col === j) {
       return; 
     }
@@ -128,7 +132,7 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     const { row, col } = selectedCell;
     const newCellValues = [...cellValues];
   
-    if (board[row][col] === '.') {
+    if (board[row][col] === "ship") {
       newCellValues[row][col] = '💥';
     } else {
       newCellValues[row][col] = '•';
@@ -155,7 +159,7 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
         {selectedCell && selectedCell.row === row && selectedCell.col === col ? (
           <button className="btn-hit" onClick={() => handleHitClick(row, col)}>HIT</button>
         ) : (
-          value === '.' ? '•' : value
+          value === '💥' || value === '•' ? value : ''
         )}
       </button>
     );
@@ -176,5 +180,7 @@ function GameBoard({ board, boardType, selectedShip, onShipPlaced, randomShips =
     </div>
   );
 }
+
+
 
 export default GameBoard;

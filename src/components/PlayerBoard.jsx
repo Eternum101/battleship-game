@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import GameBoard from "./GameBoard";
+import GameController from "./GameController";
 import Ship from './Ship';
 import '../styles/PlayerBoard.css';
 
-function PlayerBoard({ board, isGameStarted, onGameStart }) {
+function PlayerBoard({ board, isGameStarted, onGameStart, handleComputerHit  }) {
   const [selectedShip, setSelectedShip] = useState(null);
   const [ships, setShips] = useState([
     { length: 5, orientation: 'horizontal' },
@@ -135,8 +135,14 @@ function PlayerBoard({ board, isGameStarted, onGameStart }) {
         <div className="column-header">8</div>
         <div className="column-header">9</div>
         <div className="column-header">10</div>
-
-        <GameBoard board={board} boardType="player" selectedShip={selectedShip !== null ? ships[selectedShip] : null} onShipPlaced={handleShipPlacement} randomShips={randomShips} isGameStarted={isGameStarted}/>
+        <GameController 
+          board={board} boardType="player" 
+          selectedShip={selectedShip !== null ? ships[selectedShip] : null} 
+          onShipPlaced={handleShipPlacement} 
+          randomShips={randomShips} 
+          isGameStarted={isGameStarted}
+          handleComputerHit={handleComputerHit}
+        />
       </div>
       <div className="fleet-container">
         {!isGameStarted && <h1>Place Fleet (Drag 'N' Drop)</h1>}

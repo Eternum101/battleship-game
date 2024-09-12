@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import GameController from "./GameController";
 import '../styles/ComputerBoard.css';
 
 function ComputerBoard({ board, isGameStarted }) {
+    const [destroyedShips, setDestroyedShips] = useState([]);
+
+    const handleShipClick = (ship) => {
+        if (!isGameStarted) return;
+        setDestroyedShips(prevState => 
+            prevState.includes(ship) ? prevState.filter(s => s !== ship) : [...prevState, ship]
+        );
+    };
+
     return (
         <div className="game-container">
             <h2 className="computer-title">ENEMY FLEET</h2>
@@ -36,13 +45,38 @@ function ComputerBoard({ board, isGameStarted }) {
                 <h1>Destroyed Enemy Ships</h1>
                 <div className="destroyed-enemy-ships">
                     <div className="ships-left">
-                        <h2>Destroyer (2)</h2>
-                        <h2>Submarine (3)</h2>
-                        <h2>Cruiser (3)</h2>
+                        <h2 
+                            className={`computer-ship ${destroyedShips.includes("Destroyer") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
+                            onClick={() => handleShipClick("Destroyer")}
+                        >
+                            Destroyer (2)
+                        </h2>
+                        <h2 
+                            className={`computer-ship ${destroyedShips.includes("Submarine") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
+                            onClick={() => handleShipClick("Submarine")}
+                        >
+                            Submarine (3)
+                        </h2>
+                        <h2 
+                            className={`computer-ship ${destroyedShips.includes("Cruiser") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
+                            onClick={() => handleShipClick("Cruiser")}
+                        >
+                            Cruiser (3)
+                        </h2>
                     </div>
                     <div className="ships-right">
-                        <h2>Battleship (4)</h2>
-                        <h2>Aircraft Carrier (5)</h2>
+                        <h2 
+                            className={`computer-ship ${destroyedShips.includes("Battleship") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
+                            onClick={() => handleShipClick("Battleship")}
+                        >
+                            Battleship (4)
+                        </h2>
+                        <h2 
+                            className={`computer-ship ${destroyedShips.includes("Aircraft Carrier") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
+                            onClick={() => handleShipClick("Aircraft Carrier")}
+                        >
+                            Aircraft Carrier (5)
+                        </h2>
                     </div>
                 </div>
             </div>

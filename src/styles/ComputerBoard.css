@@ -42,6 +42,11 @@
     gap: 50px;
 }
 
+.destroyed {
+    text-decoration: line-through;
+    color: red;
+}
+
 .ships-left {
     display: flex;
     flex-direction: column;
@@ -54,4 +59,19 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+}
+
+.computer-ship {
+    transition: transform 0.3s ease;
+}
+
+.computer-ship:hover {
+    cursor: pointer;
+    color: red;
+    transform: scale(1.1);
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }

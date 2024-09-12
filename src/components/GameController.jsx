@@ -126,7 +126,7 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
     setSelectedCell({ row: i, col: j });
   };
 
-  const handleHitClick = () => {
+  const handleComputerHitClick = () => {
     if (!selectedCell) return;
   
     const { row, col } = selectedCell;
@@ -157,7 +157,7 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
         onClick={() => handleCellClick(row, col)}
       >
         {selectedCell && selectedCell.row === row && selectedCell.col === col ? (
-          <button className="btn-hit" onClick={() => handleHitClick(row, col)}>HIT</button>
+          <button className="btn-hit" onClick={() => handleComputerHitClick(row, col)}>HIT</button>
         ) : (
           value === '💥' || value === '•' ? value : ''
         )}

@@ -7,6 +7,7 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
   const [validCells, setValidCells] = useState([]);
   const [cellValues, setCellValues] = useState(board);
   const [selectedCell, setSelectedCell] = useState(null);
+  const [playerTurn, setPlayerTurn] = useState(true);
 
   const prevHoverCell = useRef(null);
 
@@ -126,7 +127,7 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
     setSelectedCell({ row: i, col: j });
   };
 
-  const handleComputerHitClick = () => {
+  const handlePlayerTurn = () => {
     if (!selectedCell) return;
   
     const { row, col } = selectedCell;
@@ -140,7 +141,35 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
   
     setCellValues(newCellValues);
     setSelectedCell(null);
-  };  
+    setPlayerTurn(false);
+    setTimeout(() => {
+      handleComputerTurn();
+    }, 1000);
+  };
+
+  const handleComputerTurn = () => {
+    const availableCells = [];
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (cellValues[i][j] !== '💥' && cellValues[i][j] !== '•') {
+          availableCells.push({ row: i, col: j });
+        }
+      }
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableCells.length);
+    const { row, col } = availableCells[randomIndex];
+    const newCellValues = [...cellValues];
+
+    if (board[row][col] === "ship") {
+      newCellValues[row][col] = '💥';
+    } else {
+      newCellValues[row][col] = '•';
+    }
+
+    setCellValues(newCellValues);
+    setPlayerTurn(true);
+  };
 
   function Cell({ row, col, value }) {
     const [, drop] = useDrop({
@@ -157,7 +186,7 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
         onClick={() => handleCellClick(row, col)}
       >
         {selectedCell && selectedCell.row === row && selectedCell.col === col ? (
-          <button className="btn-hit" onClick={() => handleComputerHitClick(row, col)}>HIT</button>
+          <button className="btn-hit" onClick={() => handlePlayerTurn(row, col)}>HIT</button>
         ) : (
           value === '💥' || value === '•' ? value : ''
         )}

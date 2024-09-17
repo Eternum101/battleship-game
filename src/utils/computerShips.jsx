@@ -1,5 +1,5 @@
-export const randomizeComputerShips = (board) => {
-    const newBoard = board.map(row => row.slice());
+export const randomizeComputerShips = (computerBoard) => {
+    const newcomputerBoard = computerBoard.map(row => row.slice());
     const newRandomShips = [];
     const newShips = [
         { length: 5, orientation: 'horizontal' },
@@ -14,35 +14,35 @@ export const randomizeComputerShips = (board) => {
         let row, col;
 
         do {
-            row = Math.floor(Math.random() * board.length);
-            col = Math.floor(Math.random() * board[0].length);
-        } while (!isValidRandomPlacement(row, col, ship.length, orientation, newRandomShips, newBoard));
+            row = Math.floor(Math.random() * computerBoard.length);
+            col = Math.floor(Math.random() * computerBoard[0].length);
+        } while (!isValidRandomPlacement(row, col, ship.length, orientation, newRandomShips, newcomputerBoard));
 
         for (let k = 0; k < ship.length; k++) {
             if (orientation === 'horizontal') {
-                newBoard[row][col + k] = "ship";
+                newcomputerBoard[row][col + k] = "ship";
                 newRandomShips.push({ row, col: col + k });
             } else {
-                newBoard[row + k][col] = "ship";
+                newcomputerBoard[row + k][col] = "ship";
                 newRandomShips.push({ row: row + k, col });
             }
         }
     });
-    return newBoard;
+    return newcomputerBoard;
 };
 
-const isValidRandomPlacement = (row, col, length, orientation, randomShips, board) => {
+const isValidRandomPlacement = (row, col, length, orientation, randomShips, computerBoard) => {
     const isAdjacent = (r, c) => randomShips.some(ship => Math.abs(ship.row - r) <= 1 && Math.abs(ship.col - c) <= 1);
 
     if (orientation === 'horizontal') {
-        if (col + length > board[0].length) return false;
+        if (col + length > computerBoard[0].length) return false;
         for (let k = 0; k < length; k++) {
-            if (board[row][col + k] || isAdjacent(row, col + k)) return false;
+            if (computerBoard[row][col + k] || isAdjacent(row, col + k)) return false;
         }
     } else {
-        if (row + length > board.length) return false;
+        if (row + length > computerBoard.length) return false;
         for (let k = 0; k < length; k++) {
-            if (board[row + k][col] || isAdjacent(row + k, col)) return false;
+            if (computerBoard[row + k][col] || isAdjacent(row + k, col)) return false;
         }
     }
     return true;

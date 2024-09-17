@@ -2,18 +2,18 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import _ from 'lodash';
 
-function GameController({ board, boardType, selectedShip, onShipPlaced, randomShips = [], isGameStarted }) {
+function GameController({ playerBoard, computerBoard, boardType, selectedShip, onShipPlaced, randomShips = [], isGameStarted }) {
   const [placedShips, setPlacedShips] = useState([]);
   const [validCells, setValidCells] = useState([]);
-  const [cellValues, setCellValues] = useState(board);
+  const [cellValues, setCellValues] = useState(boardType === 'player' ? playerBoard : computerBoard);
   const [selectedCell, setSelectedCell] = useState(null);
   const [playerTurn, setPlayerTurn] = useState(true);
 
   const prevHoverCell = useRef(null);
 
   useEffect(() => {
-    setCellValues(board);
-  }, [board]);
+    setCellValues(boardType === 'player' ? playerBoard : computerBoard);
+  }, [playerBoard, computerBoard, boardType]);
 
   const isValidPlacement = useCallback((i, j) => {
     if (!selectedShip) return false;
@@ -28,14 +28,14 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
     };
 
     if (orientation === 'horizontal') {
-      if (j + length > board[0].length) return false;
+      if (j + length > cellValues[0].length) return false;
       for (let k = 0; k < length; k++) {
         if (placedShips.some(ship => ship.row === i && ship.col === j + k) ||
             randomShips.some(ship => ship.row === i && ship.col === j + k) ||
             isAdjacent(i, j + k)) return false;
       }
     } else {
-      if (i + length > board.length) return false;
+      if (i + length > cellValues.length) return false;
       for (let k = 0; k < length; k++) {
         if (placedShips.some(ship => ship.row === i + k && ship.col === j) ||
             randomShips.some(ship => ship.row === i + k && ship.col === j) ||
@@ -43,7 +43,7 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
       }
     }
     return true;
-  }, [placedShips, randomShips, selectedShip]);
+  }, [placedShips, randomShips, selectedShip, cellValues]);
 
   const placeShip = useCallback((i, j) => {
     if (!isValidPlacement(i, j)) return;
@@ -133,7 +133,7 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
     const { row, col } = selectedCell;
     const newCellValues = [...cellValues];
   
-    if (board[row][col] === "ship") {
+    if (computerBoard[row][col] === "ship") {
       newCellValues[row][col] = '💥';
     } else {
       newCellValues[row][col] = '•';
@@ -149,8 +149,8 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
 
   const handleComputerTurn = () => {
     const availableCells = [];
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
+    for (let i = 0; i < playerBoard.length; i++) {
+      for (let j = 0; j < playerBoard[i].length; j++) {
         if (cellValues[i][j] !== '💥' && cellValues[i][j] !== '•') {
           availableCells.push({ row: i, col: j });
         }
@@ -161,7 +161,7 @@ function GameController({ board, boardType, selectedShip, onShipPlaced, randomSh
     const { row, col } = availableCells[randomIndex];
     const newCellValues = [...cellValues];
 
-    if (board[row][col] === "ship") {
+    if (playerBoard[row][col] === "ship") {
       newCellValues[row][col] = '💥';
     } else {
       newCellValues[row][col] = '•';

@@ -20,14 +20,14 @@ function GameBoard() {
   return (
     <div className="grid-container">
         <PlayerBoard
-          board={playerBoard} 
+          playerBoard={playerBoard} 
           boardType="player" 
           isGameStarted={isGameStarted}
           onGameStart={handleGameStart}
         />
         <div className="separator"></div>
         <ComputerBoard 
-          board={computerBoard} 
+          computerBoard={computerBoard} 
           boardType="computer" 
           isGameStarted={isGameStarted}
         />

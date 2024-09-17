@@ -3,7 +3,7 @@ import GameController from "./GameController";
 import Ship from './Ship';
 import '../styles/PlayerBoard.css';
 
-function PlayerBoard({ board, isGameStarted, onGameStart, handleComputerHit  }) {
+function PlayerBoard({ playerBoard, isGameStarted, onGameStart, handleComputerHit  }) {
   const [selectedShip, setSelectedShip] = useState(null);
   const [ships, setShips] = useState([
     { length: 5, orientation: 'horizontal' },
@@ -62,8 +62,8 @@ function PlayerBoard({ board, isGameStarted, onGameStart, handleComputerHit  }) 
       let row, col;
 
       do {
-        row = Math.floor(Math.random() * board.length);
-        col = Math.floor(Math.random() * board[0].length);
+        row = Math.floor(Math.random() * playerBoard.length);
+        col = Math.floor(Math.random() * playerBoard[0].length);
       } while (!isValidRandomPlacement(row, col, ship.length, orientation, newRandomShips));
 
       if (orientation === 'horizontal') {
@@ -92,12 +92,12 @@ function PlayerBoard({ board, isGameStarted, onGameStart, handleComputerHit  }) 
     };
 
     if (orientation === 'horizontal') {
-      if (col + length > board[0].length) return false;
+      if (col + length > playerBoard[0].length) return false;
       for (let k = 0; k < length; k++) {
         if (randomShips.some(ship => ship.row === row && ship.col === col + k) || isAdjacent(row, col + k)) return false;
       }
     } else {
-      if (row + length > board.length) return false;
+      if (row + length > playerBoard.length) return false;
       for (let k = 0; k < length; k++) {
         if (randomShips.some(ship => ship.row === row + k && ship.col === col) || isAdjacent(row + k, col)) return false;
       }
@@ -136,7 +136,7 @@ function PlayerBoard({ board, isGameStarted, onGameStart, handleComputerHit  }) 
         <div className="column-header">9</div>
         <div className="column-header">10</div>
         <GameController 
-          board={board} boardType="player" 
+          playerBoard={playerBoard} boardType="player" 
           selectedShip={selectedShip !== null ? ships[selectedShip] : null} 
           onShipPlaced={handleShipPlacement} 
           randomShips={randomShips} 

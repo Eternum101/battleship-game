@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import GameController from "./GameController";
 import '../styles/ComputerBoard.css';
 
-function ComputerBoard({ board, isGameStarted }) {
+function ComputerBoard({ computerBoard, isGameStarted }) {
     const [destroyedShips, setDestroyedShips] = useState([]);
 
     const handleShipClick = (ship) => {
@@ -39,7 +39,7 @@ function ComputerBoard({ board, isGameStarted }) {
                 <div className="column-header">9</div>
                 <div className="column-header">10</div>
                     
-                <GameController board={board} boardType="computer" isGameStarted={isGameStarted}/>
+                <GameController computerBoard={computerBoard} boardType="computer" isGameStarted={isGameStarted}/>
             </div>
             <div className="enemy-fleet-container">
                 <h1>Destroyed Enemy Ships</h1>

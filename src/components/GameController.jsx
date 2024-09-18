@@ -5,15 +5,17 @@ import _ from 'lodash';
 function GameController({ playerBoard, computerBoard, boardType, selectedShip, onShipPlaced, randomShips = [], isGameStarted }) {
   const [placedShips, setPlacedShips] = useState([]);
   const [validCells, setValidCells] = useState([]);
-  const [cellValues, setCellValues] = useState(boardType === 'player' ? playerBoard : computerBoard);
+  const [playerCellValues, setPlayerCellValues] = useState(playerBoard);
+  const [computerCellValues, setComputerCellValues] = useState(computerBoard);
   const [selectedCell, setSelectedCell] = useState(null);
   const [playerTurn, setPlayerTurn] = useState(true);
 
   const prevHoverCell = useRef(null);
 
   useEffect(() => {
-    setCellValues(boardType === 'player' ? playerBoard : computerBoard);
-  }, [playerBoard, computerBoard, boardType]);
+    setPlayerCellValues(playerBoard);
+    setComputerCellValues(computerBoard);
+  }, [playerBoard, computerBoard]);
 
   const isValidPlacement = useCallback((i, j) => {
     if (!selectedShip) return false;
@@ -28,14 +30,14 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
     };
 
     if (orientation === 'horizontal') {
-      if (j + length > cellValues[0].length) return false;
+      if (j + length > playerCellValues[0].length) return false;
       for (let k = 0; k < length; k++) {
         if (placedShips.some(ship => ship.row === i && ship.col === j + k) ||
             randomShips.some(ship => ship.row === i && ship.col === j + k) ||
             isAdjacent(i, j + k)) return false;
       }
     } else {
-      if (i + length > cellValues.length) return false;
+      if (i + length > playerCellValues.length) return false;
       for (let k = 0; k < length; k++) {
         if (placedShips.some(ship => ship.row === i + k && ship.col === j) ||
             randomShips.some(ship => ship.row === i + k && ship.col === j) ||
@@ -43,28 +45,32 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
       }
     }
     return true;
-  }, [placedShips, randomShips, selectedShip, cellValues]);
+  }, [placedShips, randomShips, selectedShip, playerCellValues]);
 
   const placeShip = useCallback((i, j) => {
     if (!isValidPlacement(i, j)) return;
 
     const { length, orientation } = selectedShip;
     const newPlacedShips = [...placedShips];
+    const newPlayerCellValues = [...playerCellValues];
 
     if (orientation === 'horizontal') {
       for (let k = 0; k < length; k++) {
         newPlacedShips.push({ row: i, col: j + k });
+        newPlayerCellValues[i][j + k] = 'playerShip';
       }
     } else {
       for (let k = 0; k < length; k++) {
         newPlacedShips.push({ row: i + k, col: j });
+        newPlayerCellValues[i + k][j] = 'playerShip';
       }
     }
 
     setPlacedShips(newPlacedShips);
+    setPlayerCellValues(newPlayerCellValues);
     setValidCells([]);
     onShipPlaced();
-  }, [isValidPlacement, placedShips, selectedShip, onShipPlaced]);
+  }, [isValidPlacement, placedShips, selectedShip, playerCellValues, onShipPlaced]);
 
   const handleHover = useCallback(
     _.throttle((i, j) => {
@@ -94,7 +100,7 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
     [selectedShip, isValidPlacement]
   );
 
-  const getCellStyle = (i, j) => {
+  const getCellStyle = (i, j, cellValues) => {
     if (cellValues[i][j] === '💥') {
       return { color: '#d6263e' , fontSize: '25px' };
     }
@@ -116,7 +122,7 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
   const handleCellClick = (i, j) => {
     if (!isGameStarted || boardType !== 'computer') return;
 
-    if (cellValues[i][j] === '💥' || cellValues[i][j] === '•') {
+    if (computerCellValues[i][j] === '💥' || computerCellValues[i][j] === '•') {
       return;
     }
 
@@ -131,17 +137,18 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
     if (!selectedCell) return;
   
     const { row, col } = selectedCell;
-    const newCellValues = [...cellValues];
+    const newComputerCellValues = [...computerCellValues];
   
     if (computerBoard[row][col] === "ship") {
-      newCellValues[row][col] = '💥';
+      newComputerCellValues[row][col] = '💥';
     } else {
-      newCellValues[row][col] = '•';
+      newComputerCellValues[row][col] = '•';
     }
   
-    setCellValues(newCellValues);
+    setComputerCellValues(newComputerCellValues);
     setSelectedCell(null);
     setPlayerTurn(false);
+
     setTimeout(() => {
       handleComputerTurn();
     }, 1000);
@@ -149,29 +156,32 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
 
   const handleComputerTurn = () => {
     const availableCells = [];
-    for (let i = 0; i < playerBoard.length; i++) {
-      for (let j = 0; j < playerBoard[i].length; j++) {
-        if (cellValues[i][j] !== '💥' && cellValues[i][j] !== '•') {
+    for (let i = 0; i < playerCellValues.length; i++) {
+      if (!playerCellValues[i]) continue; // Ensure playerCellValues[i] is defined
+      for (let j = 0; j < playerCellValues[i].length; j++) {
+        if (playerCellValues[i][j] !== '💥' && playerCellValues[i][j] !== '•') {
           availableCells.push({ row: i, col: j });
         }
       }
     }
 
+    if (availableCells.length === 0) return;
+
     const randomIndex = Math.floor(Math.random() * availableCells.length);
     const { row, col } = availableCells[randomIndex];
-    const newCellValues = [...cellValues];
+    const newPlayerCellValues = [...playerCellValues];
 
-    if (playerBoard[row][col] === "ship") {
-      newCellValues[row][col] = '💥';
+    if (playerCellValues[row][col] === "playerShip") {
+      newPlayerCellValues[row][col] = '💥';
     } else {
-      newCellValues[row][col] = '•';
+      newPlayerCellValues[row][col] = '•';
     }
 
-    setCellValues(newCellValues);
+    setPlayerCellValues(newPlayerCellValues);
     setPlayerTurn(true);
   };
 
-  function Cell({ row, col, value }) {
+  function Cell({ row, col, value, cellValues }) {
     const [, drop] = useDrop({
       accept: 'ship',
       drop: () => placeShip(row, col),
@@ -182,7 +192,7 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
       <button
         ref={drop}
         className={`cell ${boardType}-cell`}
-        style={{ ...getCellStyle(row, col) }}
+        style={{ ...getCellStyle(row, col, cellValues) }}
         onClick={() => handleCellClick(row, col)}
       >
         {selectedCell && selectedCell.row === row && selectedCell.col === col ? (
@@ -196,20 +206,33 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
 
   return (
     <div className='grid'>
-      {cellValues.map((row, i) =>
-        row.map((cell, j) => (
-          <Cell
-            key={`${i}-${j}`}
-            row={i}
-            col={j}
-            value={cell} 
-          />
-        ))
+      {boardType === 'player' ? (
+        playerCellValues.map((row, i) =>
+          row.map((cell, j) => (
+            <Cell
+              key={`${i}-${j}`}
+              row={i}
+              col={j}
+              value={cell}
+              cellValues={playerCellValues}
+            />
+          ))
+        )
+      ) : (
+        computerCellValues.map((row, i) =>
+          row.map((cell, j) => (
+            <Cell
+              key={`${i}-${j}`}
+              row={i}
+              col={j}
+              value={cell}
+              cellValues={computerCellValues}
+            />
+          ))
+        )
       )}
     </div>
   );
 }
-
-
 
 export default GameController;

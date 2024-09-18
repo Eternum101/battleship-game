@@ -45,7 +45,6 @@ function Ship({ length, orientation, onClick, isSelected }) {
       className="ship"
       style={shipStyle}
       onClick={() => {
-        console.log("Ship clicked:", length, orientation);
         onClick();
       }}
     >

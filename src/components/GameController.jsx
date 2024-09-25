@@ -13,8 +13,8 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
   const prevHoverCell = useRef(null);
 
   useEffect(() => {
-    setPlayerCellValues(playerBoard);
-    setComputerCellValues(computerBoard);
+    if (playerBoard) setPlayerCellValues(playerBoard);
+    if (computerBoard) setComputerCellValues(computerBoard);
   }, [playerBoard, computerBoard]);
 
   const isValidPlacement = useCallback((i, j) => {
@@ -49,6 +49,8 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
 
   const placeShip = useCallback((i, j) => {
     if (!isValidPlacement(i, j)) return;
+
+    console.log(`Placing ship at ${i},${j}`);
 
     const { length, orientation } = selectedShip;
     const newPlacedShips = [...placedShips];
@@ -120,66 +122,85 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
   };
   
   const handleCellClick = (i, j) => {
-    if (!isGameStarted || boardType !== 'computer') return;
-
+    if (!isGameStarted || boardType !== 'computer' || !playerTurn) return; // Prevent player from clicking if it's not their turn
+  
     if (computerCellValues[i][j] === '💥' || computerCellValues[i][j] === '•') {
       return;
     }
-
+  
     if (selectedCell && selectedCell.row === i && selectedCell.col === j) {
-      return; 
+      return;
     }
-
+  
     setSelectedCell({ row: i, col: j });
-  };
+    console.log(`Player clicked on computer cell ${i},${j}`);
+  };  
 
   const handlePlayerTurn = () => {
-    if (!selectedCell) return;
+    if (!selectedCell || !playerTurn) return;
   
     const { row, col } = selectedCell;
     const newComputerCellValues = [...computerCellValues];
   
+    console.log(`Player attacks cell ${row},${col}`);
+    
     if (computerBoard[row][col] === "ship") {
       newComputerCellValues[row][col] = '💥';
+      console.log(`Hit on cell ${row},${col}`);
     } else {
       newComputerCellValues[row][col] = '•';
+      console.log(`Miss on cell ${row},${col}`);
     }
   
     setComputerCellValues(newComputerCellValues);
     setSelectedCell(null);
     setPlayerTurn(false);
-
+    
     setTimeout(() => {
       handleComputerTurn();
-    }, 1000);
-  };
+    }, 1000); 
+  };  
 
   const handleComputerTurn = () => {
+    console.log("Computer's turn starts");
+  
+    if (!playerCellValues || playerCellValues.length === 0) return; // Early return if undefined or empty
+      
     const availableCells = [];
     for (let i = 0; i < playerCellValues.length; i++) {
-      if (!playerCellValues[i]) continue; // Ensure playerCellValues[i] is defined
+      if (!playerCellValues[i]) continue;
       for (let j = 0; j < playerCellValues[i].length; j++) {
         if (playerCellValues[i][j] !== '💥' && playerCellValues[i][j] !== '•') {
           availableCells.push({ row: i, col: j });
         }
       }
     }
-
+  
     if (availableCells.length === 0) return;
-
+  
     const randomIndex = Math.floor(Math.random() * availableCells.length);
     const { row, col } = availableCells[randomIndex];
-    const newPlayerCellValues = [...playerCellValues];
-
+  
+    console.log(`Computer selected cell ${row},${col}`);
+    
+    const newPlayerCellValues = playerCellValues.map(row => [...row]);
+  
     if (playerCellValues[row][col] === "playerShip") {
-      newPlayerCellValues[row][col] = '💥';
+      newPlayerCellValues[row][col] = '💥'; 
+      console.log(`Computer hits player's ship at ${row},${col}`);
     } else {
-      newPlayerCellValues[row][col] = '•';
+      newPlayerCellValues[row][col] = '•'; 
+      console.log(`Computer misses at ${row},${col}`);
     }
-
+  
     setPlayerCellValues(newPlayerCellValues);
-    setPlayerTurn(true);
+  
+    setTimeout(() => {
+      console.log("Switching back to player's turn");
+      setPlayerTurn(true); 
+    }, 500);
   };
+  
 
   function Cell({ row, col, value, cellValues }) {
     const [, drop] = useDrop({
@@ -218,7 +239,7 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
             />
           ))
         )
-      ) : (
+      ) : boardType === 'computer' ? (
         computerCellValues.map((row, i) =>
           row.map((cell, j) => (
             <Cell
@@ -230,9 +251,9 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
             />
           ))
         )
-      )}
+      ) : null}
     </div>
-  );
+  );  
 }
 
 export default GameController;

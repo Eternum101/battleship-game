@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PlayerBoard from './PlayerBoard';
 import ComputerBoard from './ComputerBoard';
 import { randomizeComputerShips } from '../utils/computerShips';
@@ -12,25 +12,22 @@ function GameBoard() {
 
   const handleGameStart = () => {
     setIsGameStarted(true);
-
     const computerShips = randomizeComputerShips(emptyBoard);
     setComputerBoard(computerShips);
   };
 
   return (
     <div className="grid-container">
-        <PlayerBoard
-          playerBoard={playerBoard} 
-          boardType="player" 
-          isGameStarted={isGameStarted}
-          onGameStart={handleGameStart}
-        />
-        <div className="separator"></div>
-        <ComputerBoard 
-          computerBoard={computerBoard} 
-          boardType="computer" 
-          isGameStarted={isGameStarted}
-        />
+      <PlayerBoard
+        playerBoard={playerBoard}
+        isGameStarted={isGameStarted}
+        onGameStart={handleGameStart}
+      />
+      <div className="separator"></div>
+      <ComputerBoard 
+        computerBoard={computerBoard} 
+        isGameStarted={isGameStarted}
+      />
     </div>
   );
 }

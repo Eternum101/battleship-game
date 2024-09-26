@@ -155,53 +155,8 @@ function GameController({ playerBoard, computerBoard, boardType, selectedShip, o
     setComputerCellValues(newComputerCellValues);
     setSelectedCell(null);
     setPlayerTurn(false);
-    
-    setTimeout(() => {
-      handleComputerTurn();
-    }, 1000); 
   };  
-
-  const handleComputerTurn = () => {
-    console.log("Computer's turn starts");
   
-    if (!playerCellValues || playerCellValues.length === 0) return; // Early return if undefined or empty
-      
-    const availableCells = [];
-    for (let i = 0; i < playerCellValues.length; i++) {
-      if (!playerCellValues[i]) continue;
-      for (let j = 0; j < playerCellValues[i].length; j++) {
-        if (playerCellValues[i][j] !== '💥' && playerCellValues[i][j] !== '•') {
-          availableCells.push({ row: i, col: j });
-        }
-      }
-    }
-  
-    if (availableCells.length === 0) return;
-  
-    const randomIndex = Math.floor(Math.random() * availableCells.length);
-    const { row, col } = availableCells[randomIndex];
-  
-    console.log(`Computer selected cell ${row},${col}`);
-    
-    const newPlayerCellValues = playerCellValues.map(row => [...row]);
-  
-    if (playerCellValues[row][col] === "playerShip") {
-      newPlayerCellValues[row][col] = '💥'; 
-      console.log(`Computer hits player's ship at ${row},${col}`);
-    } else {
-      newPlayerCellValues[row][col] = '•'; 
-      console.log(`Computer misses at ${row},${col}`);
-    }
-  
-    setPlayerCellValues(newPlayerCellValues);
-  
-    setTimeout(() => {
-      console.log("Switching back to player's turn");
-      setPlayerTurn(true); 
-    }, 500);
-  };
-  
-
   function Cell({ row, col, value, cellValues }) {
     const [, drop] = useDrop({
       accept: 'ship',

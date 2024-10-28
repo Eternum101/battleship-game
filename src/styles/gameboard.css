@@ -1,0 +1,173 @@
+.board {
+  width: 500px;
+  height: 500px;
+  margin: 1em 2em 2em 1em;
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 2px;
+}
+
+.board-row {
+  display: contents;
+}
+
+.corner {
+  grid-column: span 1;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+}
+
+.board .square {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: #b2d4e4;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  cursor: grab;
+  transition: background-color 100ms ease-in-out;
+}
+
+.board .comp-square {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: #d8d8d8;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  cursor: grab;
+  transition: background-color 100ms ease-in-out;
+}
+
+.comp-square.selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-hit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d6263e;
+  color: #fff;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  font-weight: 700;
+  cursor: pointer;
+  animation: popIn 0.3s ease-out;
+}
+
+.btn-hit:hover {
+  background-color: #b82236;
+  transition: all 150ms ease-in-out;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shake {
+  from {
+    transform: translate(30%, 17%);
+  }
+
+  to {
+    transform: translate(-30%, -17%);
+  }
+}
+
+.board .empty {
+  background-color: #b2d4e4;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  color: #fff;
+  user-select: none;
+}
+
+.board .ship {
+  background-color: #d6263e;
+  border: 1px solid #fff;
+  border-radius: 5px;
+}
+
+.board .hit {
+  position: relative;
+}
+
+.board .hit::after {
+  content: '💥';
+  font-size: 1.5em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.board .miss {
+  position: relative;
+}
+
+.board .miss::after {
+  content: '';
+  width: 50%;
+  height: 50%;
+  background-color: #929292;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.board .ship-sunk {
+  background-color: #a0a0a0;
+  animation: shake 50ms 6 alternate backwards;
+  position: relative;
+}
+
+.board .ship-sunk::after {
+  content: '❌';
+  font-size: 1.2em;
+  color: red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.board .forbidden {
+  background-color: #d8d8d8;
+}

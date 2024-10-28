@@ -1,0 +1,192 @@
+:root {
+  --micro-space: 0.3em;
+  --small-space: 1em;
+  --medium-space: 2em;
+}
+
+#replica-fleet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.replica {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to right, #a8a8a8, #919191);
+  border-radius: 10px;
+  padding: 5px;
+  margin: 10px;
+  width: fit-content;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.replica:hover {
+  background-color: #d6263e;
+  opacity: 0.9;
+}
+
+.replica:active {
+  position: relative;
+  top: 1px;
+}
+
+.placing {
+  background: linear-gradient(to right, #da3c51, #d6263e);
+}
+
+.placing:hover {
+  background: linear-gradient(to right, #da3c51, #d6263e);
+}
+
+.replica-squares {
+  display: flex;
+  flex-direction: row;
+}
+
+.small-square {
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  border-radius: 50%;
+  margin: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  #replica-ships {
+    max-width: 400px;
+    height: 250px;
+  }
+}
+
+.player-title {
+  border-radius: 5px;
+  background-color: #d6263e;
+  color: white;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  padding: 10px;
+  width: 100%;
+}
+
+.computer-title {
+  border-radius: 5px;
+  background-color: #495972;
+  color: white;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  padding: 10px;
+  width: 100%;
+}
+
+.btn-start {
+  z-index: 1;
+  position: relative;
+  padding: 6px 15px;
+  margin-bottom: 30px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #d6263e;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #d6263e;
+  transition: color 0.5s;
+  cursor: pointer;
+  border-radius: 30px;
+  letter-spacing: 1px;
+}
+
+.btn-start:before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #d6263e;
+  border-radius: 30px;
+}
+
+.btn-start:hover {
+  color: #FFFFFF;
+  border-radius: 30px;
+}
+
+.btn-start:hover:after {
+  transition: all 0.3s;
+  left: 0;
+  top: 0;
+  border-radius: 30px;
+}
+
+.btn-start__inner {
+  z-index: -1;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  background: #ffffff;
+}
+
+.btn-start__blobs {
+  position: relative;
+  display: block;
+  height: 100%;
+  filter: url('#goo');
+}
+
+.btn-start__blob {
+  position: absolute;
+  top: 2px;
+  width: 25%;
+  height: 100%;
+  background: #d6263e;
+  border-radius: 100%;
+  transform: translate3d(0, 150%, 0) scale(1.7);
+  transition: transform 0.45s;
+}
+
+.btn-start__blob:nth-child(1) {
+  left: 0;
+  transition-delay: 0s;
+}
+
+.btn-start__blob:nth-child(2) {
+  left: 25%;
+  transition-delay: 0.08s;
+}
+
+.btn-start__blob:nth-child(3) {
+  left: 50%;
+  transition-delay: 0.16s;
+}
+
+.btn-start__blob:nth-child(4) {
+  left: 75%;
+  transition-delay: 0.24s;
+}
+
+.btn-start:hover .btn-start__blob {
+  transform: translateZ(0) scale(1.7);
+}

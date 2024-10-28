@@ -1,87 +1,182 @@
-import React, { useState } from "react";
-import GameController from "./GameController";
-import '../styles/ComputerBoard.css';
+import React, { useState } from 'react';
+import {
+  stateToClass,
+  generateEmptyLayout,
+  putEntityInLayout,
+  SQUARE_STATE,
+  indexToCoords,
+  updateSunkShips,
+} from './GameBoard';
 
-function ComputerBoard({ computerBoard, isGameStarted }) {
-    const [destroyedShips, setDestroyedShips] = useState([]);
+export const ComputerBoard = ({
+  computerShips,
+  gameState,
+  hitsByPlayer,
+  setHitsByPlayer,
+  handleComputerTurn,
+  checkIfGameOver,
+  setComputerShips,
+}) => {
+  const [destroyedShips, setDestroyedShips] = useState([]);
+  const [selectedSquare, setSelectedSquare] = useState(null);
 
-    const handleShipClick = (ship) => {
-        if (!isGameStarted) return;
-        setDestroyedShips(prevState => 
-            prevState.includes(ship) ? prevState.filter(s => s !== ship) : [...prevState, ship]
-        );
-    };
+  let compLayout = computerShips.reduce(
+    (prevLayout, currentShip) =>
+      putEntityInLayout(prevLayout, currentShip, SQUARE_STATE.ship),
+    generateEmptyLayout()
+  );
 
+  compLayout = hitsByPlayer.reduce(
+    (prevLayout, currentHit) =>
+      putEntityInLayout(prevLayout, currentHit, currentHit.type),
+    compLayout
+  );
+
+  compLayout = computerShips.reduce(
+    (prevLayout, currentShip) =>
+      currentShip.sunk
+        ? putEntityInLayout(prevLayout, currentShip, SQUARE_STATE.ship_sunk)
+        : prevLayout,
+    compLayout
+  );
+
+  const fireTorpedo = (index) => {
+    if (compLayout[index] === 'ship') {
+      const newHits = [
+        ...hitsByPlayer,
+        {
+          position: indexToCoords(index),
+          type: SQUARE_STATE.hit,
+        },
+      ];
+      setHitsByPlayer(newHits);
+      return newHits;
+    }
+    if (compLayout[index] === 'empty') {
+      const newHits = [
+        ...hitsByPlayer,
+        {
+          position: indexToCoords(index),
+          type: SQUARE_STATE.miss,
+        },
+      ];
+      setHitsByPlayer(newHits);
+      return newHits;
+    }
+  };
+
+  const playerTurn = gameState === 'player-turn';
+  const playerCanFire = playerTurn && !checkIfGameOver();
+
+  let alreadyHit = (index) =>
+    compLayout[index] === 'hit' ||
+    compLayout[index] === 'miss' ||
+    compLayout[index] === 'ship-sunk';
+
+  const handleSquareClick = (index) => {
+    if (playerCanFire && !alreadyHit(index)) {
+      setSelectedSquare(index);
+    }
+  };
+
+  const handleHitClick = (index) => {
+    const newHits = fireTorpedo(index);
+    const shipsWithSunkFlag = updateSunkShips(newHits, computerShips);
+    setComputerShips(shipsWithSunkFlag);
+    handleComputerTurn();
+    setSelectedSquare(null);
+  };
+
+  let compSquares = compLayout.map((square, index) => {
     return (
-        <div className="game-container">
-            <h2 className="computer-title">ENEMY FLEET</h2>
-            <div className="gameboard-container">
-                <div className="row-header"></div>
-                <div className="row-header">A</div>
-                <div className="row-header">B</div>
-                <div className="row-header">C</div>
-                <div className="row-header">D</div>
-                <div className="row-header">E</div>
-                <div className="row-header">F</div>
-                <div className="row-header">G</div>
-                <div className="row-header">H</div>
-                <div className="row-header">I</div>
-                <div className="row-header">J</div>
-                    
-                <div className="column-header">1</div>
-                <div className="column-header">2</div>
-                <div className="column-header">3</div>
-                <div className="column-header">4</div>
-                <div className="column-header">5</div>
-                <div className="column-header">6</div>
-                <div className="column-header">7</div>
-                <div className="column-header">8</div>
-                <div className="column-header">9</div>
-                <div className="column-header">10</div>
-                    
-                <GameController computerBoard={computerBoard} boardType="computer" isGameStarted={isGameStarted}/>
-            </div>
-            <div className="enemy-fleet-container">
-                <h1>Destroyed Enemy Ships</h1>
-                <div className="destroyed-enemy-ships">
-                    <div className="ships-left">
-                        <h2 
-                            className={`computer-ship ${destroyedShips.includes("Destroyer") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
-                            onClick={() => handleShipClick("Destroyer")}
-                        >
-                            Destroyer (2)
-                        </h2>
-                        <h2 
-                            className={`computer-ship ${destroyedShips.includes("Submarine") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
-                            onClick={() => handleShipClick("Submarine")}
-                        >
-                            Submarine (3)
-                        </h2>
-                        <h2 
-                            className={`computer-ship ${destroyedShips.includes("Cruiser") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
-                            onClick={() => handleShipClick("Cruiser")}
-                        >
-                            Cruiser (3)
-                        </h2>
-                    </div>
-                    <div className="ships-right">
-                        <h2 
-                            className={`computer-ship ${destroyedShips.includes("Battleship") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
-                            onClick={() => handleShipClick("Battleship")}
-                        >
-                            Battleship (4)
-                        </h2>
-                        <h2 
-                            className={`computer-ship ${destroyedShips.includes("Aircraft Carrier") ? "destroyed" : ""} ${!isGameStarted ? "disabled" : ""}`}
-                            onClick={() => handleShipClick("Aircraft Carrier")}
-                        >
-                            Aircraft Carrier (5)
-                        </h2>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div
+        className={
+          stateToClass[square] === 'hit' ||
+          stateToClass[square] === 'miss' ||
+          stateToClass[square] === 'ship-sunk'
+            ? `comp-square ${stateToClass[square]}`
+            : `comp-square ${selectedSquare === index ? 'selected' : ''}`
+        }
+        key={`comp-square-${index}`}
+        id={`comp-square-${index}`}
+        onClick={() => handleSquareClick(index)}
+      >
+        {selectedSquare === index && !alreadyHit(index) ? (
+          <button className="btn-hit" onClick={() => handleHitClick(index)}>
+            HIT
+          </button>
+        ) : ''}
+      </div>
     );
-}
+  });
 
-export default ComputerBoard;
+  const handleShipClick = (shipName) => {
+    setDestroyedShips((prevDestroyedShips) =>
+      prevDestroyedShips.includes(shipName)
+        ? prevDestroyedShips.filter((name) => name !== shipName)
+        : [...prevDestroyedShips, shipName]
+    );
+  };
+
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+  const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+  return (
+    <div>
+      <h2 className="computer-title">ENEMY FLEET</h2>
+      <div className="board">
+        <div className="board-row">
+          <div className="corner"></div>
+          {letters.map((letter, index) => (
+            <div className="label" key={`letter-${index}`}>{letter}</div>
+          ))}
+        </div>
+        {numbers.map((number, rowIndex) => (
+          <div className="board-row" key={`row-${rowIndex}`}>
+            <div className="label">{number}</div>
+            {compSquares.slice(rowIndex * 10, (rowIndex + 1) * 10)}
+          </div>
+        ))}
+      </div>
+      <div className='enemy-fleet-container'>
+        <div className='computer-fleet-title'>Destroyed Enemy Ships</div>
+        <div className='destroyed-enemy-ships'>
+          <div className="ships-left">
+            <h2 
+              className={`computer-ship ${destroyedShips.includes("Destroyer") ? "destroyed" : ""}`}
+              onClick={() => handleShipClick("Destroyer")}
+            >
+              Destroyer (2)
+            </h2>
+            <h2 
+              className={`computer-ship ${destroyedShips.includes("Submarine") ? "destroyed" : ""}`}
+              onClick={() => handleShipClick("Submarine")}
+            >
+              Submarine (3)
+            </h2>
+            <h2 
+              className={`computer-ship ${destroyedShips.includes("Cruiser") ? "destroyed" : ""}`}
+              onClick={() => handleShipClick("Cruiser")}
+            >
+              Cruiser (3)
+            </h2>
+          </div>
+          <div className="ships-right">
+            <h2 
+              className={`computer-ship ${destroyedShips.includes("Battleship") ? "destroyed" : ""}`}
+              onClick={() => handleShipClick("Battleship")}
+            >
+              Battleship (4)
+            </h2>
+            <h2 
+              className={`computer-ship ${destroyedShips.includes("Aircraft Carrier") ? "destroyed" : ""}`}
+              onClick={() => handleShipClick("Aircraft Carrier")}
+            >
+              Aircraft Carrier (5)
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

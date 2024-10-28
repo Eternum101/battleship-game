@@ -1,0 +1,63 @@
+.computer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 800px;
+}
+
+.enemy-fleet-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 30px;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .computer-fleet-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: #d6263e;
+    width: 70%;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 5px;
+  }
+  
+  .destroyed-enemy-ships {
+    display: flex;
+    justify-content: center;
+    opacity: 0.7;
+    font-size: 0.7rem;
+    gap: 50px;
+  }
+  
+  .computer-ship {
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .computer-ship:hover {
+    color: #d6263e;
+  }
+  
+  .computer-ship.destroyed {
+    text-decoration: line-through;
+    color: #d6263e;
+  }
+  
+  .ships-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+  .ships-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }

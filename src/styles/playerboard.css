@@ -1,0 +1,93 @@
+.player-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 800px;
+}
+
+#fleet-container,
+#player-tips {
+  text-align: center;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.player-fleet-title {
+  font-size: 1.1rem;
+  background-color: #0072ff;
+  color: white;
+  width: 70%;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.btn-fleet-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-randomize {
+  margin: 10px;
+  padding: 10px 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  background-color: #495972;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 130px;
+}
+
+.btn-rotate {
+  margin: 10px;
+  padding: 10px 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  background-color: #495972;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 130px;
+}
+
+.player-tip,
+#firing-info {
+  margin-top: var(--small-space);
+  font-family: var(--regular);
+  text-transform: none;
+  color: var(--oc-gray-7);
+}
+
+.btn-restart {
+  color: #d6263e;
+  cursor: pointer;
+  font-size: 15px;
+  border: #d6263e 2px solid;
+  border-radius: 5px;
+  padding: 0.5rem;
+  transition: all 150ms ease-in-out;
+  width: 100px;
+}
+
+.btn-restart:hover {
+  color: #fff;
+  background-color: #d6263e;
+}

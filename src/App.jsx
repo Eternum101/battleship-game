@@ -1,13 +1,12 @@
-import React from "react";
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import GameBoard from "./components/GameBoard.jsx";
+import React from 'react';
+import { GameController } from './components/GameController';
+import './styles/styles.css'
 
 function App() {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <GameBoard/>
-    </DndProvider>
+  <React.Fragment>
+    <GameController/>
+  </React.Fragment>
   );
 }
 

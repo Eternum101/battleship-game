@@ -1,214 +1,250 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useDrop } from 'react-dnd';
-import _ from 'lodash';
+import React, { useState } from 'react';
+import { Game } from './Game';
+import {
+  placeAllComputerShips,
+  SQUARE_STATE,
+  indexToCoords,
+  putEntityInLayout,
+  generateEmptyLayout,
+  generateRandomIndex,
+  getNeighbors,
+  updateSunkShips,
+  coordsToIndex,
+} from './GameBoard';
 
-function GameController({ playerBoard, computerBoard, boardType, selectedShip, onShipPlaced, randomShips = [], isGameStarted }) {
+const AVAILABLE_SHIPS = [
+  {
+    name: 'carrier',
+    length: 5,
+    placed: null,
+  },
+  {
+    name: 'battleship',
+    length: 4,
+    placed: null,
+  },
+  {
+    name: 'cruiser',
+    length: 3,
+    placed: null,
+  },
+  {
+    name: 'submarine',
+    length: 3,
+    placed: null,
+  },
+  {
+    name: 'destroyer',
+    length: 2,
+    placed: null,
+  },
+];
+
+export const GameController = () => {
+  const [gameState, setGameState] = useState('placement');
+  const [winner, setWinner] = useState(null);
+
+  const [currentlyPlacing, setCurrentlyPlacing] = useState(null);
   const [placedShips, setPlacedShips] = useState([]);
-  const [validCells, setValidCells] = useState([]);
-  const [playerCellValues, setPlayerCellValues] = useState(playerBoard);
-  const [computerCellValues, setComputerCellValues] = useState(computerBoard);
-  const [selectedCell, setSelectedCell] = useState(null);
-  const [playerTurn, setPlayerTurn] = useState(true);
+  const [availableShips, setAvailableShips] = useState(AVAILABLE_SHIPS);
+  const [computerShips, setComputerShips] = useState([]);
+  const [hitsByPlayer, setHitsByPlayer] = useState([]);
+  const [hitsByComputer, setHitsByComputer] = useState([]);
 
-  const prevHoverCell = useRef(null);
+  // Player Functionality
+  const selectShip = (shipName) => {
+    let shipIdx = availableShips.findIndex((ship) => ship.name === shipName);
+    const shipToPlace = availableShips[shipIdx];
 
-  useEffect(() => {
-    if (playerBoard) setPlayerCellValues(playerBoard);
-    if (computerBoard) setComputerCellValues(computerBoard);
-  }, [playerBoard, computerBoard]);
+    setCurrentlyPlacing({
+      ...shipToPlace,
+      orientation: 'horizontal',
+      position: null,
+    });
+  };
 
-  const isValidPlacement = useCallback((i, j) => {
-    if (!selectedShip) return false;
-    const { length, orientation } = selectedShip;
+  const placeShip = (currentlyPlacing) => {
+    setPlacedShips([
+      ...placedShips,
+      {
+        ...currentlyPlacing,
+        placed: true,
+      },
+    ]);
 
-    const isAdjacent = (row, col) => {
-      return placedShips.some(ship =>
-        Math.abs(ship.row - row) <= 1 && Math.abs(ship.col - col) <= 1
-      ) || randomShips.some(ship =>
-        Math.abs(ship.row - row) <= 1 && Math.abs(ship.col - col) <= 1
-      );
-    };
+    setAvailableShips((previousShips) =>
+      previousShips.filter((ship) => ship.name !== currentlyPlacing.name)
+    );
 
-    if (orientation === 'horizontal') {
-      if (j + length > playerCellValues[0].length) return false;
-      for (let k = 0; k < length; k++) {
-        if (placedShips.some(ship => ship.row === i && ship.col === j + k) ||
-            randomShips.some(ship => ship.row === i && ship.col === j + k) ||
-            isAdjacent(i, j + k)) return false;
-      }
-    } else {
-      if (i + length > playerCellValues.length) return false;
-      for (let k = 0; k < length; k++) {
-        if (placedShips.some(ship => ship.row === i + k && ship.col === j) ||
-            randomShips.some(ship => ship.row === i + k && ship.col === j) ||
-            isAdjacent(i + k, j)) return false;
-      }
-    }
-    return true;
-  }, [placedShips, randomShips, selectedShip, playerCellValues]);
+    setCurrentlyPlacing(null);
+  };
 
-  const placeShip = useCallback((i, j) => {
-    if (!isValidPlacement(i, j)) return;
-
-    console.log(`Placing ship at ${i},${j}`);
-
-    const { length, orientation } = selectedShip;
-    const newPlacedShips = [...placedShips];
-    const newPlayerCellValues = [...playerCellValues];
-
-    if (orientation === 'horizontal') {
-      for (let k = 0; k < length; k++) {
-        newPlacedShips.push({ row: i, col: j + k });
-        newPlayerCellValues[i][j + k] = 'playerShip';
-      }
-    } else {
-      for (let k = 0; k < length; k++) {
-        newPlacedShips.push({ row: i + k, col: j });
-        newPlayerCellValues[i + k][j] = 'playerShip';
-      }
-    }
-
-    setPlacedShips(newPlacedShips);
-    setPlayerCellValues(newPlayerCellValues);
-    setValidCells([]);
-    onShipPlaced();
-  }, [isValidPlacement, placedShips, selectedShip, playerCellValues, onShipPlaced]);
-
-  const handleHover = useCallback(
-    _.throttle((i, j) => {
-      if (prevHoverCell.current && prevHoverCell.current.row === i && prevHoverCell.current.col === j) {
-        return;
-      }
-
-      prevHoverCell.current = { row: i, col: j };
-
-      if (!selectedShip || !isValidPlacement(i, j)) return;
-
-      const { length, orientation } = selectedShip;
-      const newValidCells = [];
-
-      if (orientation === 'horizontal') {
-        for (let k = 0; k < length; k++) {
-          newValidCells.push({ row: i, col: j + k });
-        }
-      } else {
-        for (let k = 0; k < length; k++) {
-          newValidCells.push({ row: i + k, col: j });
-        }
-      }
-
-      setValidCells(newValidCells);
-    }, 100),
-    [selectedShip, isValidPlacement]
-  );
-
-  const getCellStyle = (i, j, cellValues) => {
-    if (cellValues[i][j] === '💥') {
-      return { color: '#d6263e' , fontSize: '25px' };
-    }
-  
-    if (cellValues[i][j] === '•') {
-      return { color: 'gray', fontSize: '65px'};
-    }
-  
-    if (placedShips.some(ship => ship.row === i && ship.col === j) ||
-        randomShips.some(ship => ship.row === i && ship.col === j)) {
-      return { backgroundColor: '#d6263e' };
-    }
-  
-    if (validCells.some(cell => cell.row === i && cell.col === j)) {
-      return { backgroundColor: '#d46776' };
+  const rotateShip = (event) => {
+    if (currentlyPlacing != null) {
+      setCurrentlyPlacing({
+        ...currentlyPlacing,
+        orientation:
+          currentlyPlacing.orientation === 'vertical' ? 'horizontal' : 'vertical',
+      });
     }
   };
-  
-  const handleCellClick = (i, j) => {
-    if (!isGameStarted || boardType !== 'computer' || !playerTurn) return; // Prevent player from clicking if it's not their turn
-  
-    if (computerCellValues[i][j] === '💥' || computerCellValues[i][j] === '•') {
-      return;
-    }
-  
-    if (selectedCell && selectedCell.row === i && selectedCell.col === j) {
-      return;
-    }
-  
-    setSelectedCell({ row: i, col: j });
-    console.log(`Player clicked on computer cell ${i},${j}`);
-  };  
 
-  const handlePlayerTurn = () => {
-    if (!selectedCell || !playerTurn) return;
-  
-    const { row, col } = selectedCell;
-    const newComputerCellValues = [...computerCellValues];
-  
-    console.log(`Player attacks cell ${row},${col}`);
-    
-    if (computerBoard[row][col] === "ship") {
-      newComputerCellValues[row][col] = '💥';
-      console.log(`Hit on cell ${row},${col}`);
-    } else {
-      newComputerCellValues[row][col] = '•';
-      console.log(`Miss on cell ${row},${col}`);
+  const randomizeShips = () => {
+    let placedPlayerShips = placeAllComputerShips(AVAILABLE_SHIPS.slice());
+    setPlacedShips(placedPlayerShips);
+    setAvailableShips([]);
+    setCurrentlyPlacing(null);
+  };
+
+  const startTurn = () => {
+    generateComputerShips();
+    setGameState('player-turn');
+  };
+
+  const changeTurn = () => {
+    setGameState((oldGameState) =>
+      oldGameState === 'player-turn' ? 'computer-turn' : 'player-turn'
+    );
+  };
+
+  // Computer Functionality
+  const generateComputerShips = () => {
+    let placedComputerShips = placeAllComputerShips(AVAILABLE_SHIPS.slice());
+    setComputerShips(placedComputerShips);
+  };
+
+  const computerFire = (index, layout) => {
+    let computerHits;
+
+    if (layout[index] === 'ship') {
+      computerHits = [
+        ...hitsByComputer,
+        {
+          position: indexToCoords(index),
+          type: SQUARE_STATE.hit,
+        },
+      ];
     }
-  
-    setComputerCellValues(newComputerCellValues);
-    setSelectedCell(null);
-    setPlayerTurn(false);
-  };  
-  
-  function Cell({ row, col, value, cellValues }) {
-    const [, drop] = useDrop({
-      accept: 'ship',
-      drop: () => placeShip(row, col),
-      hover: () => handleHover(row, col),
+    if (layout[index] === 'empty') {
+      computerHits = [
+        ...hitsByComputer,
+        {
+          position: indexToCoords(index),
+          type: SQUARE_STATE.miss,
+        },
+      ];
+    }
+    const sunkShips = updateSunkShips(computerHits, placedShips);
+    setPlacedShips(sunkShips);
+    setHitsByComputer(computerHits);
+  };
+
+  const handleComputerTurn = () => {
+    changeTurn();
+
+    if (checkIfGameOver()) {
+      return;
+    }
+
+    let layout = placedShips.reduce(
+      (prevLayout, currentShip) =>
+        putEntityInLayout(prevLayout, currentShip, SQUARE_STATE.ship),
+      generateEmptyLayout()
+    );
+
+    layout = hitsByComputer.reduce(
+      (prevLayout, currentHit) =>
+        putEntityInLayout(prevLayout, currentHit, currentHit.type),
+      layout
+    );
+
+    layout = placedShips.reduce(
+      (prevLayout, currentShip) =>
+        currentShip.sunk
+          ? putEntityInLayout(prevLayout, currentShip, SQUARE_STATE.ship_sunk)
+          : prevLayout,
+      layout
+    );
+
+    let successfulComputerHits = hitsByComputer.filter((hit) => hit.type === 'hit');
+
+    let nonSunkComputerHits = successfulComputerHits.filter((hit) => {
+      const hitIndex = coordsToIndex(hit.position);
+      return layout[hitIndex] === 'hit';
     });
 
-    return (
-      <button
-        ref={drop}
-        className={`cell ${boardType}-cell`}
-        style={{ ...getCellStyle(row, col, cellValues) }}
-        onClick={() => handleCellClick(row, col)}
-      >
-        {selectedCell && selectedCell.row === row && selectedCell.col === col ? (
-          <button className="btn-hit" onClick={() => handlePlayerTurn(row, col)}>HIT</button>
-        ) : (
-          value === '💥' || value === '•' ? value : ''
-        )}
-      </button>
-    );
-  }
+    let potentialTargets = nonSunkComputerHits
+      .flatMap((hit) => getNeighbors(hit.position))
+      .filter((idx) => layout[idx] === 'empty' || layout[idx] === 'ship');
+
+    if (potentialTargets.length === 0) {
+      let layoutIndices = layout.map((item, idx) => idx);
+      potentialTargets = layoutIndices.filter(
+        (index) => layout[index] === 'ship' || layout[index] === 'empty'
+      );
+    }
+
+    let randomIndex = generateRandomIndex(potentialTargets.length);
+
+    let target = potentialTargets[randomIndex];
+
+    setTimeout(() => {
+      computerFire(target, layout);
+      changeTurn();
+    }, 300);
+  };
+
+  // End Game Functionality
+  const checkIfGameOver = () => {
+    let successfulPlayerHits = hitsByPlayer.filter((hit) => hit.type === 'hit').length;
+    let successfulComputerHits = hitsByComputer.filter((hit) => hit.type === 'hit')
+      .length;
+
+    if (successfulComputerHits === 17 || successfulPlayerHits === 17) {
+      setGameState('game-over');
+
+      return true;
+    }
+
+    return false;
+  };
+
+  const startAgain = () => {
+    setGameState('placement');
+    setWinner(null);
+    setCurrentlyPlacing(null);
+    setPlacedShips([]);
+    setAvailableShips(AVAILABLE_SHIPS);
+    setComputerShips([]);
+    setHitsByPlayer([]);
+    setHitsByComputer([]);
+  };
 
   return (
-    <div className='grid'>
-      {boardType === 'player' ? (
-        playerCellValues.map((row, i) =>
-          row.map((cell, j) => (
-            <Cell
-              key={`${i}-${j}`}
-              row={i}
-              col={j}
-              value={cell}
-              cellValues={playerCellValues}
-            />
-          ))
-        )
-      ) : boardType === 'computer' ? (
-        computerCellValues.map((row, i) =>
-          row.map((cell, j) => (
-            <Cell
-              key={`${i}-${j}`}
-              row={i}
-              col={j}
-              value={cell}
-              cellValues={computerCellValues}
-            />
-          ))
-        )
-      ) : null}
-    </div>
-  );  
-}
-
-export default GameController;
+    <React.Fragment>
+      <Game
+        availableShips={availableShips}
+        selectShip={selectShip}
+        currentlyPlacing={currentlyPlacing}
+        setCurrentlyPlacing={setCurrentlyPlacing}
+        rotateShip={rotateShip}
+        randomizeShips={randomizeShips}
+        placeShip={placeShip}
+        placedShips={placedShips}
+        startTurn={startTurn}
+        computerShips={computerShips}
+        gameState={gameState}
+        changeTurn={changeTurn}
+        hitsByPlayer={hitsByPlayer}
+        setHitsByPlayer={setHitsByPlayer}
+        hitsByComputer={hitsByComputer}
+        setHitsByComputer={setHitsByComputer}
+        handleComputerTurn={handleComputerTurn}
+        checkIfGameOver={checkIfGameOver}
+        startAgain={startAgain}
+        winner={winner}
+        setComputerShips={setComputerShips}
+      />
+    </React.Fragment>
+  );
+};

@@ -33,7 +33,6 @@ export const PlayerFleet = ({
 
   let playButton = (
     <div id="play-ready">
-      <p className="player-tip">Ships are in formation.</p>
       <button
         className="btn-start"
         onClick={() => {

@@ -31,11 +31,19 @@ main {
 
 #game-screen {
   display: flex;
-  gap: 80px;
+  height: 100vh;
+}
+
+.separator {
+  width: 2px;
+  background-color: #d7d7d7;
+  height: 100%;
+  margin: 0 20px;
 }
 
 @media screen and (max-width: 1100px) {
   #game-screen {
     flex-direction: column;
+    gap: 20px;
   }
 }

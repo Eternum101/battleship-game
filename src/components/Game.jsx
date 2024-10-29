@@ -45,6 +45,7 @@ export const Game = ({
           randomizeShips={randomizeShips}
         />
       </div>
+    <div className="separator"></div>
     <div className="computer-container">
       <ComputerBoard
         computerShips={computerShips}

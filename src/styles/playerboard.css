@@ -68,6 +68,15 @@
   width: 130px;
 }
 
+.btn-rotate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-randomize:hover, .btn-rotate:hover {
+  background-color: #576a88;
+}
+
 .player-tip,
 #firing-info {
   margin-top: var(--small-space);

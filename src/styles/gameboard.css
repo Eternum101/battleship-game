@@ -52,6 +52,10 @@
   justify-content: center;
 }
 
+.comp-square:hover {
+  background-color: #bdbdbd;
+}
+
 .btn-hit {
   display: flex;
   justify-content: center;
@@ -153,7 +157,7 @@
 }
 
 .board .ship-sunk {
-  background-color: #a0a0a0;
+  background-color: #adadad;
   animation: shake 50ms 6 alternate backwards;
   position: relative;
 }

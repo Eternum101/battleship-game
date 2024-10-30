@@ -12,9 +12,9 @@ export const PlayerFleet = ({
 }) => {
   const [showPlayButton, setShowPlayButton] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
+  const [isRandomized, setIsRandomized] = useState(false);
 
   let shipsLeft = availableShips.map((ship) => ship.name);
-
   let ship = shipsLeft.map((shipName) => (
     <Ship
       selectShip={selectShip}
@@ -60,8 +60,22 @@ export const PlayerFleet = ({
         <>
           <div className="player-fleet-title"> Place Fleet (Click to Place)</div>
           <div className='btn-fleet-container'>
-            <button className='btn-randomize' onClick={randomizeShips}>Randomize</button>
-            <button className='btn-rotate' onClick={rotateShip}>Rotate</button>
+            <button
+              className='btn-randomize'
+              onClick={() => {
+                randomizeShips();
+                setIsRandomized(true);
+              }}
+            >
+              Randomize
+            </button>
+            <button
+              className='btn-rotate'
+              onClick={rotateShip}
+              disabled={isRandomized}
+            >
+              Rotate
+            </button>
           </div>
           {availableShips.length > 0 ? fleet : (showPlayButton ? playButton : null)}
         </>
@@ -73,6 +87,7 @@ export const PlayerFleet = ({
             startAgain();
             setShowPlayButton(true);
             setGameStarted(false);
+            setIsRandomized(false);
           }}
         >
           Restart

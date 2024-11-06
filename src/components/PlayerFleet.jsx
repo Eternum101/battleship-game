@@ -72,7 +72,7 @@ export const PlayerFleet = ({
             <button
               className='btn-rotate'
               onClick={rotateShip}
-              disabled={isRandomized}
+              disabled={isRandomized || availableShips.length === 0} // Disable when all ships are placed
             >
               Rotate
             </button>
@@ -81,17 +81,19 @@ export const PlayerFleet = ({
         </>
       )}
       <div className='info-container'>
-        <p
-          className="btn-restart"
-          onClick={() => {
-            startAgain();
-            setShowPlayButton(true);
-            setGameStarted(false);
-            setIsRandomized(false);
-          }}
-        >
-          Restart
-        </p>
+        {!gameStarted && (
+          <p
+            className="btn-restart"
+            onClick={() => {
+              startAgain();
+              setShowPlayButton(true);
+              setGameStarted(false);
+              setIsRandomized(false);
+            }}
+          >
+            Restart
+          </p>
+        )}
       </div>
     </div>
   );

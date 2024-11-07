@@ -2,6 +2,11 @@
 @import './playerboard.css';
 @import './computerboard.css';
 @import './ships.css';
+@import url('https://fonts.googleapis.com/css2?family=Anton+SC&display=swap');
+
+#root {
+  width: 100%;
+}
 
 body {
   background-color: var(--oc-white);
@@ -16,17 +21,25 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--small-space);
 }
 
 main,
 section {
-  margin: var(--medium-space);
   text-align: center;
+  margin: 20px;
 }
 
-main {
-  max-width: 35em;
+header {
+  background-color: #f3f3f3;
+  padding: 14px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+header h1 {
+  margin-left: 50px;
+  font-family: "Anton SC", sans-serif;
+  font-weight: 300;
+  letter-spacing: 2px;
 }
 
 #game-screen {

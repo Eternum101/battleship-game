@@ -1,4 +1,5 @@
 import React from 'react';
+import { Header } from './Header';
 import { PlayerFleet } from './PlayerFleet';
 import { PlayerBoard } from './PlayerBoard';
 import { ComputerBoard } from './ComputerBoard';
@@ -26,39 +27,44 @@ export const Game = ({
   setComputerShips,
 }) => {
   return (
-    <section id="game-screen">
-      <div className="player-container">
-        <PlayerBoard
-          currentlyPlacing={currentlyPlacing}
-          setCurrentlyPlacing={setCurrentlyPlacing}
-          placeShip={placeShip}
-          placedShips={placedShips}
-          hitsByComputer={hitsByComputer}
-        />
-        <PlayerFleet
-          availableShips={availableShips}
-          selectShip={selectShip}
-          currentlyPlacing={currentlyPlacing}
-          startTurn={startTurn}
-          startAgain={startAgain}
-          rotateShip={rotateShip}
-          randomizeShips={randomizeShips}
-        />
-      </div>
-    <div className="separator"></div>
-    <div className="computer-container">
-      <ComputerBoard
-        computerShips={computerShips}
-        changeTurn={changeTurn}
-        gameState={gameState}
-        hitComputer={hitComputer}
-        hitsByPlayer={hitsByPlayer}
-        setHitsByPlayer={setHitsByPlayer}
-        handleComputerTurn={handleComputerTurn}
-        checkIfGameOver={checkIfGameOver}
-        setComputerShips={setComputerShips}
-      />
-    </div>
-    </section>
+    <>
+      <Header />
+      <main>
+        <section id="game-screen">
+          <div className="player-container">
+            <PlayerBoard
+              currentlyPlacing={currentlyPlacing}
+              setCurrentlyPlacing={setCurrentlyPlacing}
+              placeShip={placeShip}
+              placedShips={placedShips}
+              hitsByComputer={hitsByComputer}
+            />
+            <PlayerFleet
+              availableShips={availableShips}
+              selectShip={selectShip}
+              currentlyPlacing={currentlyPlacing}
+              startTurn={startTurn}
+              startAgain={startAgain}
+              rotateShip={rotateShip}
+              randomizeShips={randomizeShips}
+            />
+          </div>
+          <div className="separator"></div>
+          <div className="computer-container">
+            <ComputerBoard
+              computerShips={computerShips}
+              changeTurn={changeTurn}
+              gameState={gameState}
+              hitComputer={hitComputer}
+              hitsByPlayer={hitsByPlayer}
+              setHitsByPlayer={setHitsByPlayer}
+              handleComputerTurn={handleComputerTurn}
+              checkIfGameOver={checkIfGameOver}
+              setComputerShips={setComputerShips}
+            />
+          </div>
+        </section>
+      </main>
+    </>
   );
 };

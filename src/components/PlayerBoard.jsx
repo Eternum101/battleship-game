@@ -63,7 +63,9 @@ export const PlayerBoard = ({
             placeShip(currentlyPlacing);
           }
         }}
-        className={`square ${stateToClass[square]}`}
+        className={`square ${stateToClass[square]} ${
+          square === SQUARE_STATE.miss ? 'player-miss' : ''
+        }`}
         key={`square-${index}`}
         id={`square-${index}`}
         onMouseOver={() => {

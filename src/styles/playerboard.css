@@ -27,6 +27,11 @@
   border-radius: 5px;
 }
 
+.square.player-miss::after { 
+  background-color: #53c1fc; 
+
+}
+
 .btn-fleet-container {
   display: flex;
   justify-content: center;

@@ -68,11 +68,6 @@ li {
   margin: 5px;
 }
 
-.ship.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
 @media screen and (max-width: 768px) {
   #replica-ships {
     max-width: 400px;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Game } from './Game';
+import { GameOver } from './GameOver';
 import {
   placeAllComputerShips,
   SQUARE_STATE,
@@ -84,7 +85,7 @@ export const GameController = () => {
       setCurrentlyPlacing({
         ...currentlyPlacing,
         orientation:
-          currentlyPlacing.orientation === 'vertical' ? 'horizontal' : 'vertical',
+          currentlyPlacing.orientation === 'vertical' ? 'horizontal' : 'horizontal',
       });
     }
   };
@@ -202,6 +203,7 @@ export const GameController = () => {
 
     if (successfulComputerHits === 17 || successfulPlayerHits === 17) {
       setGameState('game-over');
+      setWinner(successfulPlayerHits === 17 ? 'player' : 'computer');
 
       return true;
     }
@@ -219,6 +221,10 @@ export const GameController = () => {
     setHitsByPlayer([]);
     setHitsByComputer([]);
   };
+
+  if (gameState === 'game-over') {
+    return <GameOver winner={winner} startAgain={startAgain} />;
+  }
 
   return (
     <React.Fragment>

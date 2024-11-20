@@ -14,6 +14,7 @@
 
 .replica {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   border-radius: 10px;
@@ -22,6 +23,10 @@
   width: fit-content;
   cursor: pointer;
   transition: all 150ms ease-in-out;
+}
+
+.replica:hover {
+  filter: brightness(0) saturate(100%) invert(22%) sepia(100%) saturate(7488%) hue-rotate(0deg) brightness(96%) contrast(105%);
 }
 
 .replica:active {
@@ -64,10 +69,6 @@ li {
 .ship-image { 
   width: 70px;
   height: 100%;
-}
-
-.ship-image:hover {
-  filter: brightness(0) saturate(100%) invert(22%) sepia(100%) saturate(7488%) hue-rotate(0deg) brightness(96%) contrast(105%);
 }
 
 .battleship-image { 

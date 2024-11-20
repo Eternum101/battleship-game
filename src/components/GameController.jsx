@@ -80,12 +80,12 @@ export const GameController = () => {
     setCurrentlyPlacing(null);
   };
 
-  const rotateShip = (event) => {
+  const rotateShip = () => {
     if (currentlyPlacing != null) {
       setCurrentlyPlacing({
         ...currentlyPlacing,
         orientation:
-          currentlyPlacing.orientation === 'vertical' ? 'horizontal' : 'horizontal',
+          currentlyPlacing.orientation === 'vertical' ? 'horizontal' : 'vertical',
       });
     }
   };

@@ -20,6 +20,7 @@ export const Ship = ({
   isCurrentlyPlacing,
 }) => {
   let ship = availableShips.find((item) => item.name === shipName);
+  const capitalizedShipName = shipName.charAt(0).toUpperCase() + shipName.slice(1);
 
   return (
     <div
@@ -31,8 +32,9 @@ export const Ship = ({
       <img
         src={shipImages[shipName]}
         alt={`${shipName}`}
-        className={`ship-image ${shipName === 'battleship' ? 'battleship-image' : ''}`}
+        className="ship-image black-ship"
       />
+      <div className="ship-name">{capitalizedShipName}</div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Ship } from './Ship';
 
 export const PlayerFleet = ({
@@ -13,17 +13,27 @@ export const PlayerFleet = ({
   const [showPlayButton, setShowPlayButton] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
   const [isRandomized, setIsRandomized] = useState(false);
+  const [allShipsPlaced, setAllShipsPlaced] = useState(false);
+
+  useEffect(() => {
+    const allPlaced = availableShips.every((ship) => ship.placed);
+    setAllShipsPlaced(allPlaced);
+  }, [availableShips]);
 
   let shipsLeft = availableShips.map((ship) => ship.name);
-  let ship = shipsLeft.map((shipName) => (
-    <Ship
-      selectShip={selectShip}
-      key={shipName}
-      isCurrentlyPlacing={currentlyPlacing && currentlyPlacing.name === shipName}
-      shipName={shipName}
-      availableShips={availableShips}
-    />
-  ));
+  let ship = shipsLeft.map((shipName) => {
+    const shipData = availableShips.find((ship) => ship.name === shipName);
+    return (
+      <Ship
+        selectShip={shipData.placed ? null : selectShip}
+        key={shipName}
+        isCurrentlyPlacing={currentlyPlacing && currentlyPlacing.name === shipName}
+        shipName={shipName}
+        availableShips={availableShips}
+        style={{ pointerEvents: shipData.placed ? 'none' : 'auto' }}
+      />
+    );
+  });
 
   let fleet = (
     <div id="replica-fleet">
@@ -57,9 +67,11 @@ export const PlayerFleet = ({
   return (
     <div id="fleet-container">
       {!gameStarted && (
-        <>
-          <div className="player-fleet-title"> Place Fleet (Click to Place)</div>
-          <div className='btn-fleet-container'>
+        <div className="player-fleet-title"> Place Fleet (Click to Place)</div>
+      )}
+      <div className='btn-fleet-container'>
+        {!gameStarted && (
+          <>
             <button
               className='btn-randomize'
               onClick={() => {
@@ -72,14 +84,15 @@ export const PlayerFleet = ({
             <button
               className='btn-rotate'
               onClick={rotateShip}
-              disabled={isRandomized || availableShips.length === 0} // Disable when all ships are placed
+              disabled={isRandomized || allShipsPlaced || availableShips.length === 0} // Disable when all ships are placed
             >
               Rotate
             </button>
-          </div>
-          {availableShips.length > 0 ? fleet : (showPlayButton ? playButton : null)}
-        </>
-      )}
+          </>
+        )}
+      </div>
+      {fleet}
+      {!gameStarted && allShipsPlaced && showPlayButton && playButton}
       <div className='info-container'>
         {!gameStarted && (
           <p

@@ -27,7 +27,7 @@ export const Ship = ({
       id={`${shipName}-replica`}
       onClick={() => selectShip(shipName)}
       key={`${shipName}`}
-      className={isCurrentlyPlacing ? 'replica placing' : 'replica'}
+      className={`replica ${isCurrentlyPlacing ? 'placing' : ''} ${ship.placed ? 'disabled' : ''}`}
     >
       <img
         src={shipImages[shipName]}

@@ -74,7 +74,9 @@ export const GameController = () => {
     ]);
 
     setAvailableShips((previousShips) =>
-      previousShips.filter((ship) => ship.name !== currentlyPlacing.name)
+      previousShips.map((ship) =>
+        ship.name === currentlyPlacing.name ? { ...ship, placed: true } : ship
+      )
     );
 
     setCurrentlyPlacing(null);
@@ -93,7 +95,9 @@ export const GameController = () => {
   const randomizeShips = () => {
     let placedPlayerShips = placeAllComputerShips(AVAILABLE_SHIPS.slice());
     setPlacedShips(placedPlayerShips);
-    setAvailableShips([]);
+    setAvailableShips(
+      AVAILABLE_SHIPS.map((ship) => ({ ...ship, placed: true }))
+    );
     setCurrentlyPlacing(null);
   };
 

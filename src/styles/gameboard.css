@@ -157,12 +157,28 @@
 }
 
 .board .ship-sunk {
-  background-color: #adadad;
+  background-color: #90b4c7;
   animation: shake 50ms 6 alternate backwards;
   position: relative;
 }
 
 .board .ship-sunk::after {
+  content: '❌';
+  font-size: 1.2em;
+  color: red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.board .comp-square.ship-sunk {
+  background-color: #adadad;
+  animation: shake 50ms 6 alternate backwards;
+  position: relative;
+}
+
+.board .comp-square.ship-sunk::after {
   content: '❌';
   font-size: 1.2em;
   color: red;

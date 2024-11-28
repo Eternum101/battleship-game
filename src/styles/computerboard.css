@@ -47,6 +47,11 @@
     text-decoration: line-through;
     color: #d6263e;
   }
+
+  .computer-ship.disabled { 
+    opacity: 0.5; 
+    pointer-events: none; 
+  }
   
   .ships-left {
     display: flex;

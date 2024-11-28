@@ -111,11 +111,13 @@ export const ComputerBoard = ({
   });
 
   const handleShipClick = (shipName) => {
-    setDestroyedShips((prevDestroyedShips) =>
-      prevDestroyedShips.includes(shipName)
-        ? prevDestroyedShips.filter((name) => name !== shipName)
-        : [...prevDestroyedShips, shipName]
-    );
+    if (gameState !== 'placement') {
+      setDestroyedShips((prevDestroyedShips) =>
+        prevDestroyedShips.includes(shipName)
+          ? prevDestroyedShips.filter((name) => name !== shipName)
+          : [...prevDestroyedShips, shipName]
+      );
+    }
   };
 
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
@@ -143,19 +145,19 @@ export const ComputerBoard = ({
         <div className='destroyed-enemy-ships'>
           <div className="ships-left">
             <h2 
-              className={`computer-ship ${destroyedShips.includes("Destroyer") ? "destroyed" : ""}`}
+              className={`computer-ship ${destroyedShips.includes("Destroyer") ? "destroyed" : ""} ${gameState === 'placement' ? "disabled" : ""}`}
               onClick={() => handleShipClick("Destroyer")}
             >
               Destroyer (2)
             </h2>
             <h2 
-              className={`computer-ship ${destroyedShips.includes("Submarine") ? "destroyed" : ""}`}
+              className={`computer-ship ${destroyedShips.includes("Submarine") ? "destroyed" : ""} ${gameState === 'placement' ? "disabled" : ""}`}
               onClick={() => handleShipClick("Submarine")}
             >
               Submarine (3)
             </h2>
             <h2 
-              className={`computer-ship ${destroyedShips.includes("Cruiser") ? "destroyed" : ""}`}
+              className={`computer-ship ${destroyedShips.includes("Cruiser") ? "destroyed" : ""} ${gameState === 'placement' ? "disabled" : ""}`}
               onClick={() => handleShipClick("Cruiser")}
             >
               Cruiser (3)
@@ -163,13 +165,13 @@ export const ComputerBoard = ({
           </div>
           <div className="ships-right">
             <h2 
-              className={`computer-ship ${destroyedShips.includes("Battleship") ? "destroyed" : ""}`}
+              className={`computer-ship ${destroyedShips.includes("Battleship") ? "destroyed" : ""} ${gameState === 'placement' ? "disabled" : ""}`}
               onClick={() => handleShipClick("Battleship")}
             >
               Battleship (4)
             </h2>
             <h2 
-              className={`computer-ship ${destroyedShips.includes("Aircraft Carrier") ? "destroyed" : ""}`}
+              className={`computer-ship ${destroyedShips.includes("Aircraft Carrier") ? "destroyed" : ""} ${gameState === 'placement' ? "disabled" : ""}`}
               onClick={() => handleShipClick("Aircraft Carrier")}
             >
               Aircraft Carrier (5)

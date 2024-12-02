@@ -66,9 +66,7 @@ export const PlayerFleet = ({
 
   return (
     <div id="fleet-container">
-      {!gameStarted && (
-        <div className="player-fleet-title"> Place Fleet (Click to Place)</div>
-      )}
+    <div className="player-fleet-title"> {gameStarted ? 'Shipyard' : 'Place Fleet (Click to Place)'} </div>
       <div className='btn-fleet-container'>
         {!gameStarted && (
           <>

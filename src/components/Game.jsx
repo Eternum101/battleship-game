@@ -3,6 +3,7 @@ import { Header } from './Header';
 import { PlayerFleet } from './PlayerFleet';
 import { PlayerBoard } from './PlayerBoard';
 import { ComputerBoard } from './ComputerBoard';
+import { TurnIndicator } from './TurnIndicator';
 
 export const Game = ({
   availableShips,
@@ -30,6 +31,7 @@ export const Game = ({
     <>
       <Header />
       <main>
+        <TurnIndicator gameState={gameState} />
         <section id="game-screen">
           <div className="player-container">
             <PlayerBoard

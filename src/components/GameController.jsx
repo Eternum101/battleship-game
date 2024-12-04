@@ -146,23 +146,23 @@ export const GameController = () => {
 
   const handleComputerTurn = () => {
     changeTurn();
-
+  
     if (checkIfGameOver()) {
       return;
     }
-
+  
     let layout = placedShips.reduce(
       (prevLayout, currentShip) =>
         putEntityInLayout(prevLayout, currentShip, SQUARE_STATE.ship),
       generateEmptyLayout()
     );
-
+  
     layout = hitsByComputer.reduce(
       (prevLayout, currentHit) =>
         putEntityInLayout(prevLayout, currentHit, currentHit.type),
       layout
     );
-
+  
     layout = placedShips.reduce(
       (prevLayout, currentShip) =>
         currentShip.sunk
@@ -170,32 +170,34 @@ export const GameController = () => {
           : prevLayout,
       layout
     );
-
+  
     let successfulComputerHits = hitsByComputer.filter((hit) => hit.type === 'hit');
-
+  
     let nonSunkComputerHits = successfulComputerHits.filter((hit) => {
       const hitIndex = coordsToIndex(hit.position);
       return layout[hitIndex] === 'hit';
     });
-
+  
     let potentialTargets = nonSunkComputerHits
       .flatMap((hit) => getNeighbors(hit.position))
       .filter((idx) => layout[idx] === 'empty' || layout[idx] === 'ship');
-
+  
     if (potentialTargets.length === 0) {
       let layoutIndices = layout.map((item, idx) => idx);
       potentialTargets = layoutIndices.filter(
         (index) => layout[index] === 'ship' || layout[index] === 'empty'
       );
     }
-
+  
     let randomIndex = generateRandomIndex(potentialTargets.length);
-
+  
     let target = potentialTargets[randomIndex];
-
+  
     setTimeout(() => {
       computerFire(target, layout);
-      changeTurn();
+      setTimeout(() => {
+        setGameState('player-turn');
+      }, 1000);
     }, 300);
   };
 

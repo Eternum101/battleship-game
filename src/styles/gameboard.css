@@ -32,7 +32,7 @@
   border-radius: 5px;
   border: 1px solid #fff;
   cursor: grab;
-  transition: background-color 100ms ease-in-out;
+  transition: background-color 200ms ease-in-out;
 }
 
 .board .comp-square {
@@ -43,7 +43,7 @@
   border-radius: 5px;
   border: 1px solid #fff;
   cursor: grab;
-  transition: background-color 100ms ease-in-out;
+  transition: background-color 400ms ease-in-out;
 }
 
 .comp-square.selected {

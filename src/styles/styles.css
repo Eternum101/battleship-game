@@ -87,6 +87,7 @@ header h1 {
   color: #fff;
   border-radius: 5px;
   transition: 150ms ease-in-out;
+  z-index: 11;
 }
 
 .game-over-screen button:hover {
@@ -106,12 +107,151 @@ header h1 {
   padding: 10px;
 }
 
-.winning-background { 
-  background-image: linear-gradient(216deg, rgba(77, 77, 77,0.05) 0%, rgba(77, 77, 77,0.05) 25%,rgba(42, 42, 42,0.05) 25%, rgba(42, 42, 42,0.05) 38%,rgba(223, 223, 223,0.05) 38%, rgba(223, 223, 223,0.05) 75%,rgba(36, 36, 36,0.05) 75%, rgba(36, 36, 36,0.05) 100%),linear-gradient(44deg, rgba(128, 128, 128,0.05) 0%, rgba(128, 128, 128,0.05) 34%,rgba(212, 212, 212,0.05) 34%, rgba(212, 212, 212,0.05) 57%,rgba(25, 25, 25,0.05) 57%, rgba(25, 25, 25,0.05) 89%,rgba(135, 135, 135,0.05) 89%, rgba(135, 135, 135,0.05) 100%),linear-gradient(241deg, rgba(55, 55, 55,0.05) 0%, rgba(55, 55, 55,0.05) 14%,rgba(209, 209, 209,0.05) 14%, rgba(209, 209, 209,0.05) 60%,rgba(245, 245, 245,0.05) 60%, rgba(245, 245, 245,0.05) 69%,rgba(164, 164, 164,0.05) 69%, rgba(164, 164, 164,0.05) 100%),linear-gradient(249deg, rgba(248, 248, 248,0.05) 0%, rgba(248, 248, 248,0.05) 32%,rgba(148, 148, 148,0.05) 32%, rgba(148, 148, 148,0.05) 35%,rgba(202, 202, 202,0.05) 35%, rgba(202, 202, 202,0.05) 51%,rgba(181, 181, 181,0.05) 51%, rgba(181, 181, 181,0.05) 100%),linear-gradient(92deg, rgb(0,114,255),rgb(0,114,255));
+.animation-wrapper{
+	background: #ace5ee;
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+  overflow: hidden;
+  z-index: 1;
 }
 
-.losing-background {
-  background-image: linear-gradient(216deg, rgba(77, 77, 77,0.05) 0%, rgba(77, 77, 77,0.05) 25%,rgba(42, 42, 42,0.05) 25%, rgba(42, 42, 42,0.05) 38%,rgba(223, 223, 223,0.05) 38%, rgba(223, 223, 223,0.05) 75%,rgba(36, 36, 36,0.05) 75%, rgba(36, 36, 36,0.05) 100%),linear-gradient(44deg, rgba(128, 128, 128,0.05) 0%, rgba(128, 128, 128,0.05) 34%,rgba(212, 212, 212,0.05) 34%, rgba(212, 212, 212,0.05) 57%,rgba(25, 25, 25,0.05) 57%, rgba(25, 25, 25,0.05) 89%,rgba(135, 135, 135,0.05) 89%, rgba(135, 135, 135,0.05) 100%),linear-gradient(241deg, rgba(55, 55, 55,0.05) 0%, rgba(55, 55, 55,0.05) 14%,rgba(209, 209, 209,0.05) 14%, rgba(209, 209, 209,0.05) 60%,rgba(245, 245, 245,0.05) 60%, rgba(245, 245, 245,0.05) 69%,rgba(164, 164, 164,0.05) 69%, rgba(164, 164, 164,0.05) 100%),linear-gradient(249deg, rgba(248, 248, 248,0.05) 0%, rgba(248, 248, 248,0.05) 32%,rgba(148, 148, 148,0.05) 32%, rgba(148, 148, 148,0.05) 35%,rgba(202, 202, 202,0.05) 35%, rgba(202, 202, 202,0.05) 51%,rgba(181, 181, 181,0.05) 51%, rgba(181, 181, 181,0.05) 100%),linear-gradient(92deg, rgb(214,38,62),rgb(214,38,62));
+.water {
+  bottom: 0;
+  left: 0;
+	position: absolute;
+  width: 100%;
+}
+
+.water ul.waves{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.water ul.waves li{
+	background-repeat: repeat-x;
+}
+
+.water ul.waves li.wave-one{
+	animation: wave 8.7s linear infinite;
+	-webkit-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+	bottom: 0px;
+	height: 50px;
+	left: 0;
+	position: absolute;
+	right: 0;
+	z-index: 10;
+}
+
+.water ul.waves li.wave-two{
+	-webkit-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+	animation: wave 10s linear infinite;
+	bottom: 0px;
+	height: 84px;
+	left: 0;
+	position: absolute;
+	right: 0;
+	z-index: 9;
+}
+
+.water ul.waves li.wave-three{
+	-webkit-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+	animation: wave 25s linear infinite;
+	bottom: 0;
+	height: 190px;
+	left: 0;
+	position: absolute;
+	right: 0;
+	z-index: 8;
+}
+
+.water ul.waves li.wave-four{
+	-webkit-animation-fill-mode: forwards;
+	-o-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+	animation: wave 25s linear infinite;
+	bottom: 0;
+	height: 205px;
+	left: 0;
+	position: absolute;
+	right: 0;
+}
+
+.boat{
+	animation: boat 3s linear infinite;
+  background-repeat: no-repeat;
+  bottom: 110px;
+  height: 400px;
+  left: 50%;
+	position: absolute;
+  width: 500px;
+}
+
+.cloud{
+	animation: cloud 30s linear infinite;
+	background-repeat: no-repeat;
+  height: 165px;
+  left: 0;
+  position: absolute;
+  width: 297px
+}
+
+.cloud2 {
+	animation: cloud 25s linear infinite;
+	background-repeat: no-repeat;
+  bottom: 320px;
+  height: 165px;
+  left: 140px;
+  position: absolute;
+  width: 297px;
+}
+
+.winning-screen, .losing-screen {
+  position: relative;
+  z-index: 11;
+}
+
+@keyframes wave{
+  0% {
+      background-position: 0 0;
+}
+
+  100% {
+      background-position: 1920px 0;
+  }
+}
+
+@keyframes boat{
+0%{
+  transform: rotate(0);
+}
+
+50%{
+  transform: rotate(-3deg);
+}
+
+100%{
+  transform: rotate(0);
+}
+}
+
+@keyframes cloud{
+0%{
+  left: -30%;
+}
+
+100%{
+  left: 100%;
+}
 }
 
 @media screen and (max-width: 1100px) {

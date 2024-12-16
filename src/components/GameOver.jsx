@@ -1,10 +1,11 @@
 import React from 'react';
 import battleshipImage from '../assets/battleship-gameover.png'; // Import the boat image
+import cloudImage from '../assets/clouds.png';
 
 export const GameOver = ({ winner, startAgain }) => {
   return (
-    <div className={`game-over-screen ${winner === 'player' ? 'winning-background' : 'losing-background'}`}>
-      <div className="animation-wrapper">
+    <div className="game-over-screen">
+      <div className={`animation-wrapper ${winner !== 'player' ? 'losing-background' : ''}`}>
         <div className="water">
           <ul className="waves">
             <li className="wave-one" style={{ backgroundImage: "url('https://i.postimg.cc/7LtCC11Y/wave1.png')" }}></li>
@@ -13,9 +14,9 @@ export const GameOver = ({ winner, startAgain }) => {
             <li className="wave-four" style={{ backgroundImage: "url('https://i.postimg.cc/1tg8DgM0/wave4.png')" }}></li>
           </ul>
         </div>
-        <img className="boat" src={battleshipImage} alt="Battleship" /> {/* Use the imported image */}
-        <div className="cloud" style={{ backgroundImage: "url('https://i.postimg.cc/VNkrLZCV/cloud-md.png')" }}></div>
-        <div className="cloud2" style={{ backgroundImage: "url('https://i.postimg.cc/VNkrLZCV/cloud-md.png')" }}></div>
+        <img className={`boat ${winner !== 'player' ? 'boat-sunk' : ''}`} src={battleshipImage} alt="Battleship" /> {/* Use the imported image */}
+        <img className="cloud" src={cloudImage} alt="Clouds"/>
+        <img className="cloud2" src={cloudImage} alt="Clouds"/>
       </div>
       {winner === 'player' ? (
         <div className="winning-screen">

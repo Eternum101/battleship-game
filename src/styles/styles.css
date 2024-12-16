@@ -107,7 +107,7 @@ header h1 {
   padding: 10px;
 }
 
-.animation-wrapper{
+.animation-wrapper {
 	background: #ace5ee;
 	bottom: 0;
 	left: 0;
@@ -125,17 +125,17 @@ header h1 {
   width: 100%;
 }
 
-.water ul.waves{
+.water ul.waves {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-.water ul.waves li{
+.water ul.waves li {
 	background-repeat: repeat-x;
 }
 
-.water ul.waves li.wave-one{
+.water ul.waves li.wave-one {
 	animation: wave 8.7s linear infinite;
 	-webkit-animation-fill-mode: forwards;
 	-o-animation-fill-mode: forwards;
@@ -148,7 +148,7 @@ header h1 {
 	z-index: 10;
 }
 
-.water ul.waves li.wave-two{
+.water ul.waves li.wave-two {
 	-webkit-animation-fill-mode: forwards;
 	-o-animation-fill-mode: forwards;
 	animation-fill-mode: forwards;
@@ -161,7 +161,7 @@ header h1 {
 	z-index: 9;
 }
 
-.water ul.waves li.wave-three{
+.water ul.waves li.wave-three {
 	-webkit-animation-fill-mode: forwards;
 	-o-animation-fill-mode: forwards;
 	animation-fill-mode: forwards;
@@ -174,7 +174,7 @@ header h1 {
 	z-index: 8;
 }
 
-.water ul.waves li.wave-four{
+.water ul.waves li.wave-four {
 	-webkit-animation-fill-mode: forwards;
 	-o-animation-fill-mode: forwards;
 	animation-fill-mode: forwards;
@@ -186,7 +186,7 @@ header h1 {
 	right: 0;
 }
 
-.boat{
+.boat {
 	animation: boat 3s linear infinite;
   background-repeat: no-repeat;
   bottom: 110px;
@@ -196,28 +196,40 @@ header h1 {
   width: 500px;
 }
 
-.cloud{
+.cloud {
 	animation: cloud 30s linear infinite;
 	background-repeat: no-repeat;
-  height: 165px;
+  height: 200px;
   left: 0;
   position: absolute;
-  width: 297px
+  width: 250px
 }
 
 .cloud2 {
 	animation: cloud 25s linear infinite;
 	background-repeat: no-repeat;
   bottom: 320px;
-  height: 165px;
+  height: 200px;
   left: 140px;
   position: absolute;
-  width: 297px;
+  width: 250px;
+  opacity: 0.9;
 }
 
 .winning-screen, .losing-screen {
   position: relative;
   z-index: 11;
+}
+
+.losing-background {
+  background: linear-gradient(to bottom, #010A10 2%,#59230B 80%,#2F1107 100%);
+}
+
+.boat-sunk {
+  position: absolute;
+  bottom: 0;
+  transition: transform 2s ease-in-out;
+  animation: boat-sunk 3s infinite;
 }
 
 @keyframes wave{
@@ -230,7 +242,7 @@ header h1 {
   }
 }
 
-@keyframes boat{
+@keyframes boat {
 0%{
   transform: rotate(0);
 }
@@ -244,7 +256,7 @@ header h1 {
 }
 }
 
-@keyframes cloud{
+@keyframes cloud {
 0%{
   left: -30%;
 }
@@ -252,6 +264,16 @@ header h1 {
 100%{
   left: 100%;
 }
+}
+
+@keyframes boat-sunk { 
+  0% { 
+    transform: translateY(0) rotate(40deg); 
+  } 50% { 
+    transform: translateY(-10px) rotate(40deg); 
+  } 100% { 
+    transform: translateY(0) rotate(40deg); 
+  } 
 }
 
 @media screen and (max-width: 1100px) {

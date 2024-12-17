@@ -186,6 +186,13 @@ header h1 {
 	right: 0;
 }
 
+.water-dark .wave-one, 
+.water-dark .wave-two, 
+.water-dark .wave-three, 
+.water-dark .wave-four { 
+  filter: grayscale(80%);  
+}
+
 .boat {
 	animation: boat 3s linear infinite;
   background-repeat: no-repeat;
@@ -202,7 +209,7 @@ header h1 {
   height: 200px;
   left: 0;
   position: absolute;
-  width: 250px
+  width: 250px;
 }
 
 .cloud2 {
@@ -230,6 +237,11 @@ header h1 {
   bottom: 0;
   transition: transform 2s ease-in-out;
   animation: boat-sunk 3s infinite;
+  filter: brightness(30%);
+}
+
+.cloud-dark {
+  filter: brightness(80%);
 }
 
 @keyframes wave{

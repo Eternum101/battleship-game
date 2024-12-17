@@ -6,7 +6,7 @@ export const GameOver = ({ winner, startAgain }) => {
   return (
     <div className="game-over-screen">
       <div className={`animation-wrapper ${winner !== 'player' ? 'losing-background' : ''}`}>
-        <div className="water">
+        <div className={`water ${winner !== 'player' ? 'water-dark' : ''}`}>
           <ul className="waves">
             <li className="wave-one" style={{ backgroundImage: "url('https://i.postimg.cc/7LtCC11Y/wave1.png')" }}></li>
             <li className="wave-two" style={{ backgroundImage: "url('https://i.postimg.cc/P5hv05rh/wave2.png')" }}></li>
@@ -15,8 +15,8 @@ export const GameOver = ({ winner, startAgain }) => {
           </ul>
         </div>
         <img className={`boat ${winner !== 'player' ? 'boat-sunk' : ''}`} src={battleshipImage} alt="Battleship" /> {/* Use the imported image */}
-        <img className="cloud" src={cloudImage} alt="Clouds"/>
-        <img className="cloud2" src={cloudImage} alt="Clouds"/>
+        <img className={`cloud ${winner !== 'player' ? 'cloud-dark' : ''}`} src={cloudImage} alt="Clouds"/> 
+        <img className={`cloud2 ${winner !== 'player' ? 'cloud-dark' : ''}`} src={cloudImage} alt="Clouds"/>
       </div>
       {winner === 'player' ? (
         <div className="winning-screen">

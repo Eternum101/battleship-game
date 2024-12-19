@@ -290,5 +290,9 @@ header h1 {
   #game-screen {
     flex-direction: column;
     gap: 20px;
+    padding-bottom: 50px;
+  }
+  .turn-indicator {
+    display: none;
   }
 }

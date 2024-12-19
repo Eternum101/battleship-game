@@ -9,6 +9,7 @@ export const PlayerFleet = ({
   startAgain,
   rotateShip,
   randomizeShips,
+  scrollToMain, // Receive the scroll function as a prop
 }) => {
   const [showPlayButton, setShowPlayButton] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
@@ -49,6 +50,7 @@ export const PlayerFleet = ({
           startTurn();
           setShowPlayButton(false);
           setGameStarted(true);
+          scrollToMain(); // Call the scroll function when the button is clicked
         }}
       >
         Start Game
@@ -66,7 +68,7 @@ export const PlayerFleet = ({
 
   return (
     <div id="fleet-container">
-    <div className="player-fleet-title"> {gameStarted ? 'Shipyard' : 'Place Fleet (Click to Place)'} </div>
+      <div className="player-fleet-title"> {gameStarted ? 'Shipyard' : 'Place Fleet (Click to Place)'} </div>
       <div className='btn-fleet-container'>
         {!gameStarted && (
           <>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Header } from './Header';
 import { PlayerFleet } from './PlayerFleet';
 import { PlayerBoard } from './PlayerBoard';
@@ -27,10 +27,16 @@ export const Game = ({
   startAgain,
   setComputerShips,
 }) => {
+  const mainRef = useRef(null);
+
+  const scrollToMain = () => {
+    mainRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       <Header />
-      <main>
+      <main ref={mainRef}>
         <TurnIndicator gameState={gameState} />
         <section id="game-screen">
           <div className="player-container">
@@ -49,6 +55,7 @@ export const Game = ({
               startAgain={startAgain}
               rotateShip={rotateShip}
               randomizeShips={randomizeShips}
+              scrollToMain={scrollToMain}
             />
           </div>
           <div className="separator"></div>

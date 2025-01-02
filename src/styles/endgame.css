@@ -1,111 +1,45 @@
-@import './gameboard.css';
-@import './playerboard.css';
-@import './computerboard.css';
-@import './ships.css';
-@import url('https://fonts.googleapis.com/css2?family=Anton+SC&display=swap');
-
-#root {
-  width: 100%;
-  height: 100vh;
-}
-
-body {
-  background-color: var(--oc-white);
-  margin: 0;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
-
-body,
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-main,
-section {
-  text-align: center;
-  margin: 20px;
-}
-
-header {
-  background-color: #f3f3f3;
-  padding: 14px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-header h1 {
-  margin-left: 50px;
-  font-family: "Anton SC", sans-serif;
-  font-weight: 300;
-  letter-spacing: 2px;
-}
-
-#game-screen {
-  display: flex;
-}
-
-.separator {
-  width: 2px;
-  background-color: #d7d7d7;
-}
-
 .game-over-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  color: white;
-  text-align: center;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: white;
+    text-align: center;
+  }
+  
+  .game-over-screen h1 {
+    font-size: 2rem;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px rgb(34, 34, 34);
+  }
+  
+  .game-over-screen h2 {
+    font-size: 4rem;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px rgb(34, 34, 34);
+    margin-bottom: 50px;
+  }
+  
+  .game-over-screen button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border: 2px solid #fff;
+    outline: none;
+    background-color: transparent;
+    color: #fff;
+    border-radius: 5px;
+    transition: 150ms ease-in-out;
+    z-index: 11;
+  }
+  
+  .game-over-screen button:hover {
+    background-color: #fff;
+    color: black;
+  }
 
-.game-over-screen h1 {
-  font-size: 2rem;
-  text-transform: uppercase;
-  text-shadow: 2px 2px 5px rgb(34, 34, 34);
-}
-
-.game-over-screen h2 {
-  font-size: 4rem;
-  text-transform: uppercase;
-  text-shadow: 2px 2px 5px rgb(34, 34, 34);
-  margin-bottom: 50px;
-}
-
-.game-over-screen button {
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  border: 2px solid #fff;
-  outline: none;
-  background-color: transparent;
-  color: #fff;
-  border-radius: 5px;
-  transition: 150ms ease-in-out;
-  z-index: 11;
-}
-
-.game-over-screen button:hover {
-  background-color: #fff;
-  color: black;
-}
-
-.turn-indicator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 2px solid;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.animation-wrapper {
+  .animation-wrapper {
 	background: #ace5ee;
 	bottom: 0;
 	left: 0;
@@ -286,13 +220,5 @@ header h1 {
   } 
 }
 
-@media screen and (max-width: 1100px) {
-  #game-screen {
-    flex-direction: column;
-    gap: 20px;
-    padding-bottom: 50px;
-  }
-  .turn-indicator {
-    display: none;
-  }
-}
+
+  

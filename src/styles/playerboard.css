@@ -82,14 +82,6 @@
   background-color: #576a88;
 }
 
-.player-tip,
-#firing-info {
-  margin-top: var(--small-space);
-  font-family: var(--regular);
-  text-transform: none;
-  color: var(--oc-gray-7);
-}
-
 .btn-restart {
   color: #d6263e;
   cursor: pointer;

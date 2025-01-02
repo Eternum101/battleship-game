@@ -1,6 +1,6 @@
 import React from 'react';
 import { GameController } from './components/GameController';
-import './styles/styles.css'
+import './styles/main.css';
 
 function App() {
   return (

@@ -1,9 +1,3 @@
-:root {
-  --micro-space: 0.3em;
-  --small-space: 1em;
-  --medium-space: 2em;
-}
-
 #replica-fleet {
   display: flex;
   flex-wrap: wrap;
